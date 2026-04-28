@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>MY CLOSET</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0f0e0d;--surface:#1a1917;--surface2:#242220;--border:#2e2c2a;
+  --text:#f0ede8;--muted:#7a7672;--accent:#e8c4a0;--accent2:#c4956a;
+  --tag-bg:#2a2724;--danger:#c47a6a;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;}
+
+nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;background:var(--bg);}
+.nav-tab{flex:1;padding:16px 8px;text-align:center;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+
+.page{display:none;padding:20px 16px 80px;max-width:480px;margin:0 auto;}
+.page.active{display:block;}
+
+.sec-title{font-family:'DM Serif Display',serif;font-size:1.6rem;font-style:italic;color:var(--accent);margin-bottom:4px;}
+.sec-sub{font-size:0.75rem;color:var(--muted);letter-spacing:0.08em;margin-bottom:20px;}
+
+.weather-strip{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;display:flex;align-items:center;gap:14px;margin-bottom:20px;}
+.w-icon{font-size:2rem;}.w-info{flex:1;}
+.w-temp{font-size:1.4rem;font-weight:300;}.w-desc{font-size:0.72rem;color:var(--muted);margin-top:2px;}
+.w-badge{background:var(--tag-bg);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:0.72rem;color:var(--accent);white-space:nowrap;}
+
+.chip-label{font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;margin-top:16px;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px;}
+.chip{padding:7px 14px;border-radius:20px;border:1px solid var(--border);font-size:0.78rem;color:var(--muted);cursor:pointer;transition:all .2s;background:var(--tag-bg);font-family:'DM Sans',sans-serif;}
+.chip:hover{border-color:var(--accent2);color:var(--accent2);}
+.chip.on{background:var(--accent2);border-color:var(--accent2);color:#0f0e0d;font-weight:500;}
+
+/* 컬러 칩 */
+.color-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px;}
+.color-chip{width:32px;height:32px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:all .2s;position:relative;}
+.color-chip.on{border-color:var(--accent);transform:scale(1.15);}
+.color-chip.on::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:0.65rem;color:white;text-shadow:0 0 3px rgba(0,0,0,0.8);}
+
+.free-input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:0.85rem;color:var(--text);outline:none;resize:none;margin-top:16px;transition:border-color .2s;}
+.free-input:focus{border-color:var(--accent2);}
+.free-input::placeholder{color:var(--muted);}
+
+.btn-big{width:100%;margin-top:16px;padding:15px;background:var(--accent);color:#0f0e0d;border:none;border-radius:14px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;}
+.btn-big:hover{background:var(--accent2);}
+.btn-big:disabled{opacity:.4;cursor:not-allowed;}
+
+.result-area{margin-top:24px;}
+.r-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:16px;animation:up .4s ease forwards;opacity:0;}
+@keyframes up{to{opacity:1;transform:none;}from{opacity:0;transform:translateY(12px);}}
+.r-card-header{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.r-card-title{font-family:'DM Serif Display',serif;font-size:1.05rem;font-style:italic;}
+.r-mood{font-size:0.65rem;letter-spacing:0.12em;color:var(--accent2);text-transform:uppercase;}
+.r-photo{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;}
+.r-photo-placeholder{width:100%;aspect-ratio:4/5;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:3rem;}
+.r-body{padding:14px 16px;}
+.r-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
+.r-tag{padding:3px 10px;border-radius:10px;background:var(--tag-bg);font-size:0.68rem;color:var(--muted);border:1px solid var(--border);}
+.r-colors{display:flex;gap:5px;margin-bottom:10px;}
+.r-color-dot{width:16px;height:16px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);}
+.r-tip{font-size:0.78rem;color:var(--accent2);line-height:1.6;padding-top:10px;border-top:1px solid var(--border);}
+
+/* AI 분석 상태 */
+.ai-status{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:0.78rem;color:var(--accent2);margin-top:12px;display:none;align-items:center;gap:8px;}
+.ai-status.show{display:flex;}
+.ai-dot{width:8px;height:8px;border-radius:50%;background:var(--accent2);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+.closet-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.closet-item{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;position:relative;cursor:pointer;transition:border-color .2s;}
+.closet-item:hover{border-color:var(--accent2);}
+.closet-img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;}
+.closet-img-placeholder{width:100%;aspect-ratio:3/4;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--muted);}
+.closet-info{padding:10px 12px;}
+.closet-name{font-size:0.82rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.closet-colors{display:flex;gap:4px;margin-top:6px;}
+.closet-color-dot{width:12px;height:12px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);}
+.closet-tags-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px;}
+.closet-tag{padding:2px 8px;border-radius:8px;background:var(--tag-bg);font-size:0.62rem;color:var(--muted);border:1px solid var(--border);}
+.closet-del{position:absolute;top:8px;right:8px;background:rgba(15,14,13,0.85);border:none;border-radius:50%;width:26px;height:26px;color:var(--danger);font-size:0.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
+.add-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:16px;}
+.field-label{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;margin-top:14px;}
+.field-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:0.84rem;color:var(--text);outline:none;transition:border-color .2s;}
+.field-input:focus{border-color:var(--accent2);}
+.url-row{display:flex;gap:8px;}
+.url-row .field-input{flex:1;}
+
+.upload-zone{border:2px dashed var(--border);border-radius:12px;aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:border-color .2s;overflow:hidden;position:relative;background:var(--bg);}
+.upload-zone:hover{border-color:var(--accent2);}
+.upload-zone img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+.upload-zone span{font-size:0.75rem;color:var(--muted);z-index:1;}
+.upload-zone .upload-icon{font-size:2rem;z-index:1;}
+#fileInput{display:none;}
+
+/* 자동 태그 결과 박스 */
+.auto-tag-box{background:var(--tag-bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-top:12px;font-size:0.78rem;line-height:1.7;color:var(--text);display:none;}
+.auto-tag-box.show{display:block;}
+.auto-tag-box .at-label{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent2);margin-bottom:6px;}
+
+.divider{border:none;border-top:1px solid var(--border);margin:14px 0;}
+
+.empty{text-align:center;padding:48px 20px;color:var(--muted);}
+.empty-icon{font-size:3rem;margin-bottom:12px;}
+.empty p{font-size:0.84rem;line-height:1.6;}
+.count-badge{display:inline-block;background:var(--accent2);color:#0f0e0d;border-radius:20px;padding:1px 8px;font-size:0.65rem;font-weight:500;margin-left:6px;}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-tab active" onclick="showPage('recommend')">오늘의 OOTD</div>
+  <div class="nav-tab" onclick="showPage('closet')">내 옷장 <span class="count-badge" id="countBadge">0</span></div>
+  <div class="nav-tab" onclick="showPage('add')">+ 추가</div>
+</nav>
+
+<!-- ① 추천 -->
+<div class="page active" id="page-recommend">
+  <div class="sec-title">오늘 뭐 입지?</div>
+  <div class="sec-sub">날씨 + 무드 선택하면 내 옷장에서 골라줘요</div>
+  <div class="weather-strip">
+    <div class="w-icon" id="wIcon">🌤️</div>
+    <div class="w-info"><div class="w-temp" id="wTemp">날씨 확인 중...</div><div class="w-desc" id="wDesc"></div></div>
+    <div class="w-badge" id="wTag">—</div>
+  </div>
+  <div class="chip-label">무드</div>
+  <div class="chips" id="moodChips">
+    <div class="chip" data-val="스트릿">스트릿</div>
+    <div class="chip" data-val="미니멀">미니멀</div>
+    <div class="chip" data-val="페미닌">페미닌</div>
+    <div class="chip" data-val="Y2K">Y2K</div>
+    <div class="chip" data-val="오피스">오피스</div>
+    <div class="chip" data-val="올드머니">올드머니</div>
+    <div class="chip" data-val="고프코어">고프코어</div>
+    <div class="chip" data-val="빈티지">빈티지</div>
+  </div>
+  <div class="chip-label">일정</div>
+  <div class="chips" id="occasionChips">
+    <div class="chip" data-val="출근">출근</div>
+    <div class="chip" data-val="데이트">데이트</div>
+    <div class="chip" data-val="주말외출">주말 외출</div>
+    <div class="chip" data-val="쇼핑">쇼핑 / 카페</div>
+    <div class="chip" data-val="모임">친구 모임</div>
+    <div class="chip" data-val="집콕">집콕</div>
+  </div>
+  <div class="chip-label">원하는 컬러</div>
+  <div class="color-chips" id="colorFilterChips"></div>
+  <textarea class="free-input" id="freeInput" rows="2" placeholder="추가 조건 (예: 청바지 입고 싶어, 블랙 톤으로)"></textarea>
+  <button class="btn-big" id="recommendBtn" onclick="recommend()">내 옷장에서 골라줘</button>
+  <div class="result-area" id="resultArea"></div>
+</div>
+
+<!-- ② 옷장 -->
+<div class="page" id="page-closet">
+  <div class="sec-title">My Closet</div>
+  <div class="sec-sub">저장된 코디 사진들</div>
+  <div class="closet-grid" id="closetGrid"></div>
+  <div class="empty" id="closetEmpty" style="display:none">
+    <div class="empty-icon">👗</div>
+    <p>아직 추가된 코디가 없어요.<br>+ 추가 탭에서 사진을 올려보세요!</p>
+  </div>
+</div>
+
+<!-- ③ 추가 -->
+<div class="page" id="page-add">
+  <div class="sec-title">코디 추가</div>
+  <div class="sec-sub">사진 올리면 AI가 태그 자동으로 달아줘요</div>
+  <div class="add-card">
+
+    <div class="field-label">사진 업로드</div>
+    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+      <div class="upload-icon">📷</div>
+      <span>탭해서 사진 선택</span>
+      <img id="previewImg" style="display:none">
+    </div>
+    <input type="file" id="fileInput" accept="image/*">
+
+    <div class="divider"></div>
+    <div class="field-label">또는 이미지 URL</div>
+    <div class="url-row">
+      <input class="field-input" type="url" id="urlInput" placeholder="https://...">
+      <button class="btn-big" style="width:auto;padding:10px 16px;margin:0;font-size:0.75rem;" onclick="previewUrl()">불러오기</button>
+    </div>
+
+    <!-- AI 분석 상태 -->
+    <div class="ai-status" id="aiStatus">
+      <div class="ai-dot"></div>
+      <span>AI가 코디 분석 중...</span>
+    </div>
+
+    <!-- 자동 태그 결과 -->
+    <div class="auto-tag-box" id="autoTagBox">
+      <div class="at-label">AI 분석 결과</div>
+      <div id="autoTagResult"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-label">코디 이름</div>
+    <input class="field-input" type="text" id="nameInput" placeholder="예: 블랙 미니 데이트 룩">
+
+    <div class="field-label">무드 (AI 추천 + 수정 가능)</div>
+    <div class="chips" id="addMoodChips">
+      <div class="chip" data-val="스트릿">스트릿</div>
+      <div class="chip" data-val="미니멀">미니멀</div>
+      <div class="chip" data-val="페미닌">페미닌</div>
+      <div class="chip" data-val="Y2K">Y2K</div>
+      <div class="chip" data-val="오피스">오피스</div>
+      <div class="chip" data-val="올드머니">올드머니</div>
+      <div class="chip" data-val="고프코어">고프코어</div>
+      <div class="chip" data-val="빈티지">빈티지</div>
+    </div>
+
+    <div class="field-label">일정 (AI 추천 + 수정 가능)</div>
+    <div class="chips" id="addOccasionChips">
+      <div class="chip" data-val="출근">출근</div>
+      <div class="chip" data-val="데이트">데이트</div>
+      <div class="chip" data-val="주말외출">주말 외출</div>
+      <div class="chip" data-val="쇼핑">쇼핑</div>
+      <div class="chip" data-val="모임">모임</div>
+      <div class="chip" data-val="집콕">집콕</div>
+    </div>
+
+    <div class="field-label">날씨 (AI 추천 + 수정 가능)</div>
+    <div class="chips" id="addWeatherChips">
+      <div class="chip" data-val="cold">패딩 각 (5°↓)</div>
+      <div class="chip" data-val="cool">아우터 필수 (6~12°)</div>
+      <div class="chip" data-val="mild">가디건 정도 (13~19°)</div>
+      <div class="chip" data-val="warm">딱 좋음 (20~24°)</div>
+      <div class="chip" data-val="hot">민소매 각 (25°↑)</div>
+    </div>
+
+    <div class="field-label">컬러 (AI 추천 + 수정 가능)</div>
+    <div class="color-chips" id="addColorChips"></div>
+
+    <div class="field-label">메모 (선택)</div>
+    <input class="field-input" type="text" id="memoInput" placeholder="예: 무신사 저장, 데이트 때 입었던 거">
+
+    <button class="btn-big" onclick="saveOutfit()">저장하기</button>
+  </div>
+</div>
+
+<script>
+// ── 컬러 팔레트 ──────────────────────────────────────
+const COLORS = [
+  {name:'블랙', hex:'#1a1a1a'},
+  {name:'화이트', hex:'#f5f5f0'},
+  {name:'그레이', hex:'#8a8a8a'},
+  {name:'베이지', hex:'#d4c4a8'},
+  {name:'카멜', hex:'#c4956a'},
+  {name:'브라운', hex:'#6b4c3b'},
+  {name:'네이비', hex:'#2c3e6b'},
+  {name:'블루', hex:'#5a8ab8'},
+  {name:'데님', hex:'#6b8fa8'},
+  {name:'그린', hex:'#6b8a6b'},
+  {name:'카키', hex:'#8a8a5a'},
+  {name:'레드', hex:'#c44a4a'},
+  {name:'핑크', hex:'#e8a0b8'},
+  {name:'라벤더', hex:'#b8a0d8'},
+  {name:'옐로우', hex:'#e8d04a'},
+  {name:'오렌지', hex:'#e8904a'},
+];
+
+function renderColorChips(containerId, selectedColors=[]) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = COLORS.map(c=>`
+    <div class="color-chip ${selectedColors.includes(c.name)?'on':''}"
+         style="background:${c.hex};"
+         data-name="${c.name}"
+         title="${c.name}"
+         onclick="toggleColor(this,'${containerId}')">
+    </div>`).join('');
+}
+
+function toggleColor(el, containerId) {
+  el.classList.toggle('on');
+}
+
+function getSelectedColors(containerId) {
+  return [...document.querySelectorAll(`#${containerId} .color-chip.on`)].map(c=>c.dataset.name);
+}
+
+renderColorChips('addColorChips');
+renderColorChips('colorFilterChips');
+
+// ── 날씨 ──────────────────────────────────────────────
+let W = {temp:null, desc:'봄 날씨', tempKey:'mild', rain:false};
+async function fetchWeather() {
+  try {
+    const pos = await new Promise((res,rej)=>navigator.geolocation.getCurrentPosition(res,rej,{timeout:6000}));
+    const {latitude:lat,longitude:lon} = pos.coords;
+    const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=apparent_temperature,precipitation_probability&timezone=auto&forecast_days=1`);
+    const d = await r.json();
+    const temp = Math.round(d.current_weather.temperature);
+    const code = d.current_weather.weathercode;
+    const hr = new Date().getHours();
+    const feel = d.hourly?.apparent_temperature?.[hr]!=null?Math.round(d.hourly.apparent_temperature[hr]):temp;
+    const rain = (d.hourly?.precipitation_probability?.[hr]??0)>40||[51,53,61,63,80,81,95].includes(code);
+    const icons={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',51:'🌦️',61:'🌧️',71:'❄️',80:'🌧️',95:'⛈️'};
+    const descs={0:'맑음',1:'주로 맑음',2:'구름 조금',3:'흐림',45:'안개',51:'이슬비',61:'비',71:'눈',80:'소나기',95:'천둥번개'};
+    const tempKey=temp<=5?'cold':temp<=12?'cool':temp<=19?'mild':temp<=24?'warm':'hot';
+    const feelLabel=temp<=5?'패딩 필수':temp<=12?'아우터 필수':temp<=19?'가디건 정도':temp<=24?'딱 좋은 날씨':'민소매 각';
+    W={temp,feel,desc:(descs[code]||'맑음')+(rain?' ☔':''),tempKey,feelLabel,rain};
+    document.getElementById('wIcon').textContent=icons[code]||'🌤️';
+    document.getElementById('wTemp').textContent=`${temp}°C  체감 ${feel}°C`;
+    document.getElementById('wDesc').textContent=W.desc;
+    document.getElementById('wTag').textContent=feelLabel;
+  } catch {
+    const m=new Date().getMonth()+1;
+    const season=m<=2||m===12?'겨울':m<=5?'봄':m<=8?'여름':'가을';
+    W={temp:null,desc:season+' 날씨',tempKey:'mild',rain:false};
+    document.getElementById('wTemp').textContent=season+' 날씨';
+    document.getElementById('wDesc').textContent='위치 권한 없음';
+    document.getElementById('wTag').textContent=season;
+  }
+}
+fetchWeather();
+
+// ── 페이지 전환 ──────────────────────────────────────
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const idx={recommend:0,closet:1,add:2}[id];
+  document.querySelectorAll('.nav-tab')[idx].classList.add('active');
+  if(id==='closet') renderCloset();
+}
+document.querySelectorAll('.chips').forEach(g=>{
+  g.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>c.classList.toggle('on')));
+});
+
+// ── localStorage ──────────────────────────────────────
+function getOutfits(){try{return JSON.parse(localStorage.getItem('myOutfits')||'[]');}catch{return[];}}
+function saveOutfits(arr){localStorage.setItem('myOutfits',JSON.stringify(arr));updateCount();}
+function updateCount(){document.getElementById('countBadge').textContent=getOutfits().length;}
+updateCount();
+
+// ── 이미지 처리 ──────────────────────────────────────
+let currentImageData = null;
+
+document.getElementById('fileInput').addEventListener('change', e=>{
+  const file=e.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    currentImageData=ev.target.result;
+    showPreview(currentImageData);
+    analyzeImage(currentImageData, 'base64');
+  };
+  reader.readAsDataURL(file);
+});
+
+function previewUrl(){
+  const url=document.getElementById('urlInput').value.trim(); if(!url) return;
+  currentImageData=url;
+  showPreview(url);
+  analyzeImage(url, 'url');
+}
+
+function showPreview(src){
+  const img=document.getElementById('previewImg');
+  img.src=src; img.style.display='block';
+  img.onerror=()=>{img.style.display='none';currentImageData=null;alert('이미지를 불러올 수 없어요.');};
+  document.querySelector('#uploadZone .upload-icon').style.display='none';
+  document.querySelector('#uploadZone span').style.display='none';
+}
+
+// ── AI 이미지 분석 ──────────────────────────────────
+async function analyzeImage(imageData, type) {
+  const statusEl = document.getElementById('aiStatus');
+  const boxEl = document.getElementById('autoTagBox');
+  const resultEl = document.getElementById('autoTagResult');
+  statusEl.classList.add('show');
+  boxEl.classList.remove('show');
+
+  try {
+    const imageContent = type === 'base64'
+      ? { type: 'base64', media_type: 'image/jpeg', data: imageData.split(',')[1] }
+      : { type: 'url', url: imageData };
+
+    const prompt = `이 코디 사진을 분석해서 아래 형식으로만 답해줘. 다른 말 없이 JSON만 출력해.
+
+{
+  "name": "코디를 한 줄로 설명하는 이름 (예: 올블랙 스트릿 미니 룩)",
+  "moods": ["스트릿","미니멀","페미닌","Y2K","오피스","올드머니","고프코어","빈티지"] 중 해당하는 것들,
+  "occasions": ["출근","데이트","주말외출","쇼핑","모임","집콕"] 중 해당하는 것들,
+  "weathers": ["cold","cool","mild","warm","hot"] 중 해당하는 것들 (cold=5도이하,cool=6-12도,mild=13-19도,warm=20-24도,hot=25도이상),
+  "colors": ["블랙","화이트","그레이","베이지","카멜","브라운","네이비","블루","데님","그린","카키","레드","핑크","라벤더","옐로우","오렌지"] 중 사진에 있는 컬러들,
+  "summary": "이 코디에 대한 한 줄 코멘트"
+}`;
+
+    const body = {
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 500,
+      messages: [{
+        role: 'user',
+        content: [
+          { type: 'image', source: imageContent },
+          { type: 'text', text: prompt }
+        ]
+      }]
+    };
+
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    const text = data.content?.map(c=>c.text||'').join('');
+    const json = JSON.parse(text.replace(/```json|```/g,'').trim());
+
+    // 이름 자동 채우기
+    if(json.name && !document.getElementById('nameInput').value) {
+      document.getElementById('nameInput').value = json.name;
+    }
+
+    // 무드 칩 자동 선택
+    document.querySelectorAll('#addMoodChips .chip').forEach(c=>{
+      if(json.moods?.includes(c.dataset.val)) c.classList.add('on');
+    });
+
+    // 일정 칩 자동 선택
+    document.querySelectorAll('#addOccasionChips .chip').forEach(c=>{
+      if(json.occasions?.includes(c.dataset.val)) c.classList.add('on');
+    });
+
+    // 날씨 칩 자동 선택
+    document.querySelectorAll('#addWeatherChips .chip').forEach(c=>{
+      if(json.weathers?.includes(c.dataset.val)) c.classList.add('on');
+    });
+
+    // 컬러 칩 자동 선택
+    renderColorChips('addColorChips', json.colors||[]);
+
+    // 결과 표시
+    resultEl.innerHTML = `
+      <div>${json.summary||''}</div>
+      <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;">
+        ${(json.colors||[]).map(c=>{
+          const col=COLORS.find(x=>x.name===c);
+          return col?`<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:0.68rem;"><span style="width:10px;height:10px;border-radius:50%;background:${col.hex};display:inline-block;"></span>${c}</span>`:'';
+        }).join('')}
+      </div>`;
+    boxEl.classList.add('show');
+
+  } catch(e) {
+    resultEl.innerHTML = `<span style="color:var(--muted)">분석 실패. 태그를 직접 선택해주세요.</span>`;
+    boxEl.classList.add('show');
+  }
+  statusEl.classList.remove('show');
+}
+
+// ── 저장 ──────────────────────────────────────────────
+function saveOutfit() {
+  const name=document.getElementById('nameInput').value.trim();
+  if(!name){alert('코디 이름을 입력해주세요!');return;}
+  if(!currentImageData){alert('사진을 추가해주세요!');return;}
+  const moods=[...document.querySelectorAll('#addMoodChips .chip.on')].map(c=>c.dataset.val);
+  const occasions=[...document.querySelectorAll('#addOccasionChips .chip.on')].map(c=>c.dataset.val);
+  const weathers=[...document.querySelectorAll('#addWeatherChips .chip.on')].map(c=>c.dataset.val);
+  const colors=getSelectedColors('addColorChips');
+  const memo=document.getElementById('memoInput').value.trim();
+  const outfit={id:Date.now(),name,image:currentImageData,moods,occasions,weathers,colors,memo,createdAt:new Date().toLocaleDateString('ko-KR')};
+  const list=getOutfits(); list.unshift(outfit); saveOutfits(list);
+
+  // 초기화
+  currentImageData=null;
+  document.getElementById('previewImg').style.display='none';
+  document.getElementById('previewImg').src='';
+  document.querySelector('#uploadZone .upload-icon').style.display='';
+  document.querySelector('#uploadZone span').style.display='';
+  document.getElementById('fileInput').value='';
+  document.getElementById('urlInput').value='';
+  document.getElementById('nameInput').value='';
+  document.getElementById('memoInput').value='';
+  document.querySelectorAll('#addMoodChips .chip,#addOccasionChips .chip,#addWeatherChips .chip').forEach(c=>c.classList.remove('on'));
+  renderColorChips('addColorChips');
+  document.getElementById('autoTagBox').classList.remove('show');
+
+  alert('저장됐어요! 🎉');
+  showPage('closet');
+}
+
+// ── 옷장 렌더링 ──────────────────────────────────────
+function renderCloset() {
+  const list=getOutfits();
+  const grid=document.getElementById('closetGrid');
+  const empty=document.getElementById('closetEmpty');
+  if(!list.length){grid.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  grid.innerHTML=list.map(o=>`
+    <div class="closet-item">
+      ${o.image?`<img class="closet-img" src="${o.image}" alt="${o.name}" onerror="this.style.display='none'">`:`<div class="closet-img-placeholder">👗</div>`}
+      <div class="closet-info">
+        <div class="closet-name">${o.name}</div>
+        <div class="closet-colors">${(o.colors||[]).slice(0,5).map(cn=>{const col=COLORS.find(x=>x.name===cn);return col?`<div class="closet-color-dot" style="background:${col.hex}" title="${cn}"></div>`:''}).join('')}</div>
+        <div class="closet-tags-row">${[...o.moods,...o.occasions].slice(0,3).map(t=>`<span class="closet-tag">${t}</span>`).join('')}</div>
+      </div>
+      <button class="closet-del" onclick="deleteOutfit(${o.id})">✕</button>
+    </div>`).join('');
+}
+
+function deleteOutfit(id){if(!confirm('삭제할까요?'))return;saveOutfits(getOutfits().filter(o=>o.id!==id));renderCloset();}
+
+// ── 추천 ──────────────────────────────────────────────
+function recommend() {
+  const list=getOutfits();
+  if(!list.length){
+    document.getElementById('resultArea').innerHTML=`<div class="empty"><div class="empty-icon">👗</div><p>옷장이 비어있어요!<br>+ 추가 탭에서 코디를 먼저 저장해보세요.</p></div>`;
+    return;
+  }
+  const selMoods=[...document.querySelectorAll('#moodChips .chip.on')].map(c=>c.dataset.val);
+  const selOccasions=[...document.querySelectorAll('#occasionChips .chip.on')].map(c=>c.dataset.val);
+  const selColors=getSelectedColors('colorFilterChips');
+  const ft=document.getElementById('freeInput').value.trim().toLowerCase();
+
+  const scored=list.map(o=>{
+    let s=0;
+    if(o.weathers?.length===0) s+=3;
+    else if(o.weathers?.includes(W.tempKey)) s+=8;
+    else {
+      const order=['cold','cool','mild','warm','hot'];
+      const wi=order.indexOf(W.tempKey);
+      (o.weathers||[]).forEach(w=>{const oi=order.indexOf(w);if(Math.abs(wi-oi)===1)s+=3;});
+    }
+    if(selMoods.length===0) s+=2; else s+=selMoods.filter(m=>o.moods.includes(m)).length*4;
+    if(selOccasions.length===0) s+=2; else s+=selOccasions.filter(oc=>o.occasions.includes(oc)).length*4;
+    if(selColors.length>0) s+=selColors.filter(c=>(o.colors||[]).includes(c)).length*3;
+    if(ft&&(o.name.toLowerCase().includes(ft)||o.memo?.toLowerCase().includes(ft))) s+=5;
+    if(W.rain&&(o.name.includes('코트')||o.name.includes('재킷')||o.memo?.includes('방수'))) s+=2;
+    s+=Math.random()*1.5;
+    return{...o,s};
+  });
+  scored.sort((a,b)=>b.s-a.s);
+  const top=scored.slice(0,2);
+
+  const ra=document.getElementById('resultArea');
+  ra.innerHTML=`<div style="font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">오늘의 픽 ${top.length}개</div>`;
+  top.forEach((o,i)=>{
+    const card=document.createElement('div');
+    card.className='r-card'; card.style.animationDelay=`${i*0.12}s`;
+    const colorDots=(o.colors||[]).map(cn=>{const col=COLORS.find(x=>x.name===cn);return col?`<div class="r-color-dot" style="background:${col.hex}" title="${cn}"></div>`:''}).join('');
+    card.innerHTML=`
+      <div class="r-card-header"><div class="r-card-title">${o.name}</div><div class="r-mood">${o.moods[0]||'—'}</div></div>
+      ${o.image?`<img class="r-photo" src="${o.image}" alt="${o.name}">`:`<div class="r-photo-placeholder">👗</div>`}
+      <div class="r-body">
+        <div class="r-colors">${colorDots}</div>
+        <div class="r-tags">${[...o.moods,...o.occasions].map(t=>`<span class="r-tag">${t}</span>`).join('')}</div>
+        ${o.memo?`<div class="r-tip">📝 ${o.memo}</div>`:''}
+        ${W.rain?`<div class="r-tip" style="margin-top:8px">☔ 비 예보 — 방수 아우터 챙기세요</div>`:''}
+      </div>`;
+    ra.appendChild(card);
+  });
+}
+</script>
+</body>
+</html>
