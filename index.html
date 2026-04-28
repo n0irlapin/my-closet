@@ -415,34 +415,56 @@ function guessWeather(colors){
 // ── Drive 사진 전체 저장 ──────────────────────────────
 async function saveAll(){
   if(!newDrivePhotos.length){alert('저장할 사진이 없어요!');return;}
-  const btn=document.querySelector('#page-add .btn-big:last-of-type');
-  if(btn){btn.disabled=true;btn.textContent='저장 중...';}
+  const btn=document.querySelector('#syncResult .btn-big');
+  if(btn){btn.disabled=true;}
 
   const occasions=[...document.querySelectorAll('#addOccasionChips .chip.on')].map(c=>c.dataset.val);
   const memo=document.getElementById('memoInput').value.trim();
   const existing=getOutfits();
+  const total=newDrivePhotos.length;
+  let done=0;
 
-  const newItems=await Promise.all(newDrivePhotos.map(async f=>{
-    const imgUrl=`https://drive.google.com/thumbnail?id=${f.id}&sz=w800`;
-    let colors=[];
-    try{
-      const img=new Image();
-      img.crossOrigin='anonymous';
-      await new Promise(res=>{img.onload=res;img.onerror=res;img.src=imgUrl;});
-      colors=await extractColors(img);
-    }catch{}
-    return{
-      id:Date.now()+Math.random(),
-      driveId:f.id,
-      name:f.name.replace(/\.[^.]+$/,''),
-      image:imgUrl,
-      colors,
-      weathers:guessWeather(colors),
-      occasions,
-      memo,
-      createdAt:new Date().toLocaleDateString('ko-KR')
-    };
-  }));
+  // 진행률 표시
+  const info=document.getElementById('newPhotosInfo');
+  function updateProgress(){
+    info.textContent=`색상 추출 중... ${done}/${total}장`;
+  }
+  updateProgress();
+
+  // 10장씩 병렬 처리
+  async function processChunk(chunk){
+    return Promise.all(chunk.map(async f=>{
+      const imgUrl=`https://drive.google.com/thumbnail?id=${f.id}&sz=w400`;
+      let colors=[];
+      try{
+        const img=new Image();
+        img.crossOrigin='anonymous';
+        await new Promise(res=>{img.onload=res;img.onerror=res;img.src=imgUrl;});
+        colors=await extractColors(img);
+      }catch{}
+      done++;
+      updateProgress();
+      return{
+        id:Date.now()+Math.random(),
+        driveId:f.id,
+        name:f.name.replace(/\.[^.]+$/, ''),
+        image:imgUrl,
+        colors,
+        weathers:guessWeather(colors),
+        occasions,
+        memo,
+        createdAt:new Date().toLocaleDateString('ko-KR')
+      };
+    }));
+  }
+
+  const CHUNK=10;
+  const newItems=[];
+  for(let i=0;i<newDrivePhotos.length;i+=CHUNK){
+    const chunk=newDrivePhotos.slice(i,i+CHUNK);
+    const results=await processChunk(chunk);
+    newItems.push(...results);
+  }
 
   try{
     saveOutfits([...newItems,...existing]);
