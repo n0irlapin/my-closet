@@ -302,12 +302,17 @@ async function syncDrive(){
   document.getElementById('syncResult').style.display='none';
 
   try{
-    const url=`https://www.googleapis.com/drive/v3/files?q='${s.folderId}'+in+parents+and+mimeType+contains+'image/'&fields=files(id,name,mimeType)&key=${s.apiKey}&pageSize=100`;
-    const r=await fetch(url);
-    const d=await r.json();
-    if(d.error) throw new Error(d.error.message);
-
-    const driveFiles=d.files||[];
+    // 전체 파일 페이지네이션으로 가져오기
+    let driveFiles=[];
+    let pageToken='';
+    do {
+      const url=`https://www.googleapis.com/drive/v3/files?q='${s.folderId}'+in+parents+and+mimeType+contains+'image/'&fields=nextPageToken,files(id,name,mimeType)&key=${s.apiKey}&pageSize=1000${pageToken?'&pageToken='+pageToken:''}`;
+      const r=await fetch(url);
+      const d=await r.json();
+      if(d.error) throw new Error(d.error.message);
+      driveFiles=[...driveFiles,...(d.files||[])];
+      pageToken=d.nextPageToken||'';
+    } while(pageToken);
     const driveIds=new Set(driveFiles.map(f=>f.id));
     const existing=getOutfits();
 
