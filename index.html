@@ -17,20 +17,17 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
 .sec-title{font-family:'DM Serif Display',serif;font-size:1.6rem;font-style:italic;color:var(--accent);margin-bottom:4px;}
 .sec-sub{font-size:0.75rem;color:var(--muted);letter-spacing:0.08em;margin-bottom:20px;}
 
-/* 날씨 */
 .weather-strip{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;display:flex;align-items:center;gap:14px;margin-bottom:20px;}
 .w-icon{font-size:2rem;}.w-info{flex:1;}
 .w-temp{font-size:1.4rem;font-weight:300;}.w-desc{font-size:0.72rem;color:var(--muted);margin-top:2px;}
 .w-badge{background:var(--tag-bg);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:0.72rem;color:var(--accent);white-space:nowrap;}
 
-/* 칩 */
 .chip-label{font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;margin-top:16px;}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px;}
 .chip{padding:7px 14px;border-radius:20px;border:1px solid var(--border);font-size:0.78rem;color:var(--muted);cursor:pointer;transition:all .2s;background:var(--tag-bg);font-family:'DM Sans',sans-serif;}
 .chip:hover{border-color:var(--accent2);color:var(--accent2);}
 .chip.on{background:var(--accent2);border-color:var(--accent2);color:#0f0e0d;font-weight:500;}
 
-/* 컬러 칩 */
 .color-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px;}
 .color-chip{width:30px;height:30px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:all .2s;position:relative;flex-shrink:0;}
 .color-chip.on{border-color:var(--accent);transform:scale(1.18);}
@@ -42,9 +39,8 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
 .btn-big{width:100%;margin-top:16px;padding:15px;background:var(--accent);color:#0f0e0d;border:none;border-radius:14px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;}
 .btn-big:hover{background:var(--accent2);}
 .btn-big:disabled{opacity:.4;cursor:not-allowed;}
-.btn-sm{padding:10px 16px;margin:0;font-size:0.75rem;width:auto;}
+.btn-sm{padding:10px 16px;margin:0;font-size:0.75rem;width:auto;margin-top:0;}
 
-/* 추천 결과 */
 .result-area{margin-top:24px;}
 .r-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:16px;animation:up .4s ease forwards;opacity:0;}
 @keyframes up{to{opacity:1;transform:none;}from{opacity:0;transform:translateY(12px);}}
@@ -60,7 +56,6 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
 .r-tag{padding:3px 10px;border-radius:10px;background:var(--tag-bg);font-size:0.68rem;color:var(--muted);border:1px solid var(--border);}
 .r-tip{font-size:0.78rem;color:var(--accent2);line-height:1.6;padding-top:10px;margin-top:10px;border-top:1px solid var(--border);}
 
-/* 옷장 */
 .closet-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
 .closet-item{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;position:relative;}
 .closet-img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;}
@@ -73,42 +68,37 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
 .closet-tag{padding:2px 7px;border-radius:6px;background:var(--tag-bg);font-size:0.6rem;color:var(--muted);border:1px solid var(--border);}
 .closet-del{position:absolute;top:8px;right:8px;background:rgba(15,14,13,0.85);border:none;border-radius:50%;width:26px;height:26px;color:var(--danger);font-size:0.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 
-/* 추가 폼 */
 .add-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:16px;}
 .field-label{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;margin-top:14px;}
 .field-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:0.84rem;color:var(--text);outline:none;transition:border-color .2s;}
 .field-input:focus{border-color:var(--accent2);}
-.url-row{display:flex;gap:8px;}
-.url-row .field-input{flex:1;}
-.upload-zone{border:2px dashed var(--border);border-radius:12px;aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:border-color .2s;overflow:hidden;position:relative;background:var(--bg);}
-.upload-zone:hover{border-color:var(--accent2);}
-.upload-zone span{font-size:0.75rem;color:var(--muted);z-index:1;}
-.upload-icon{font-size:2rem;z-index:1;}
-#fileInput{display:none;}
 .divider{border:none;border-top:1px solid var(--border);margin:14px 0;}
 
-/* 배치 큐 */
-.batch-queue{margin-top:12px;display:none;}
-.batch-item{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px;display:flex;gap:12px;align-items:center;margin-bottom:8px;}
-.batch-thumb{width:52px;height:66px;border-radius:8px;object-fit:cover;flex-shrink:0;}
-.batch-info{flex:1;min-width:0;}
-.batch-name{font-size:0.8rem;font-weight:500;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.batch-colors{display:flex;gap:4px;margin-bottom:4px;}
-.batch-color-dot{width:11px;height:11px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);}
-.batch-tags-row{display:flex;flex-wrap:wrap;gap:3px;}
-.batch-tag{padding:1px 7px;border-radius:6px;background:var(--tag-bg);font-size:0.62rem;color:var(--muted);border:1px solid var(--border);}
-.batch-status{font-size:0.7rem;color:var(--muted);margin-top:3px;}
-.batch-status.extracting{color:var(--accent2);}
-.batch-status.done{color:#6ab87a;}
+/* Drive 그리드 */
+.drive-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;}
+.drive-item{aspect-ratio:3/4;border-radius:10px;overflow:hidden;position:relative;cursor:pointer;border:2px solid transparent;transition:all .2s;}
+.drive-item:hover{border-color:var(--accent2);}
+.drive-item.selected{border-color:var(--accent);}
+.drive-item img{width:100%;height:100%;object-fit:cover;display:block;}
+.drive-item .check{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;background:var(--accent);display:none;align-items:center;justify-content:center;font-size:0.65rem;color:#0f0e0d;font-weight:700;}
+.drive-item.selected .check{display:flex;}
+.drive-loading{text-align:center;padding:24px;color:var(--muted);font-size:0.82rem;}
 
-/* 분석 중 스피너 */
-.spinner-dot{width:7px;height:7px;border-radius:50%;background:var(--accent2);display:inline-block;animation:pulse 1s infinite;}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.2;}}
+/* 설정 */
+.setting-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:12px;}
+.setting-card h3{font-size:0.8rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;}
+.setting-desc{font-size:0.75rem;color:var(--muted);line-height:1.6;margin-bottom:12px;}
+.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;}
+.status-dot.ok{background:#6ab87a;}
+.status-dot.err{background:var(--danger);}
 
 .empty{text-align:center;padding:48px 20px;color:var(--muted);}
 .empty-icon{font-size:3rem;margin-bottom:12px;}
 .empty p{font-size:0.84rem;line-height:1.6;}
 .count-badge{display:inline-block;background:var(--accent2);color:#0f0e0d;border-radius:20px;padding:1px 8px;font-size:0.65rem;font-weight:500;margin-left:6px;}
+
+.spinner-dot{width:7px;height:7px;border-radius:50%;background:var(--accent2);display:inline-block;animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.2;}}
 </style>
 </head>
 <body>
@@ -116,6 +106,7 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
   <div class="nav-tab active" onclick="showPage('recommend')">오늘의 OOTD</div>
   <div class="nav-tab" onclick="showPage('closet')">내 옷장 <span class="count-badge" id="countBadge">0</span></div>
   <div class="nav-tab" onclick="showPage('add')">+ 추가</div>
+  <div class="nav-tab" onclick="showPage('setting')">설정</div>
 </nav>
 
 <!-- 추천 -->
@@ -149,36 +140,23 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
   <div class="closet-grid" id="closetGrid"></div>
   <div class="empty" id="closetEmpty">
     <div class="empty-icon">👗</div>
-    <p>아직 추가된 코디가 없어요.<br>+ 추가 탭에서 사진을 올려보세요!</p>
+    <p>아직 추가된 코디가 없어요.<br>+ 추가 탭에서 사진을 가져오세요!</p>
   </div>
 </div>
 
 <!-- 추가 -->
 <div class="page" id="page-add">
   <div class="sec-title">코디 추가</div>
-  <div class="sec-sub">사진 올리면 색상 자동 추출 + 일정만 탭하면 끝</div>
+  <div class="sec-sub">Google Drive 폴더에서 사진 선택</div>
   <div class="add-card">
-    <div class="field-label">사진 (여러 장 한번에 OK)</div>
-    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
-      <div class="upload-icon">📷</div>
-      <span>탭해서 사진 선택</span>
-    </div>
-    <input type="file" id="fileInput" accept="image/*" multiple>
+    <button class="btn-big" style="margin-top:0" onclick="loadDrivePhotos()">📂 Drive에서 사진 불러오기</button>
+    <div id="driveGrid" class="drive-grid" style="display:none"></div>
+    <div id="driveLoading" class="drive-loading" style="display:none"><span class="spinner-dot"></span> 불러오는 중...</div>
+    <div id="driveEmpty" class="drive-loading" style="display:none">폴더에 사진이 없어요.<br>Drive MY CLOSET 폴더에 사진을 먼저 올려주세요!</div>
 
-    <div class="divider"></div>
-    <div class="field-label">또는 이미지 URL</div>
-    <div class="url-row">
-      <input class="field-input" type="url" id="urlInput" placeholder="https://...">
-      <button class="btn-big btn-sm" onclick="addFromUrl()">추가</button>
-    </div>
-
-    <!-- 배치 큐 -->
-    <div class="batch-queue" id="batchQueue"></div>
-
-    <!-- 공통 일정 태그 -->
-    <div id="tagSection" style="display:none">
+    <div id="selectSection" style="display:none">
       <div class="divider"></div>
-      <div class="field-label">일정 (전체 적용)</div>
+      <div class="field-label">일정 선택</div>
       <div class="chips" id="addOccasionChips">
         <div class="chip" data-val="출근">출근</div>
         <div class="chip" data-val="데이트">데이트</div>
@@ -187,44 +165,88 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
         <div class="chip" data-val="집콕">집콕</div>
       </div>
       <div class="field-label">메모 (선택)</div>
-      <input class="field-input" type="text" id="memoInput" placeholder="예: 무신사 저장, 여름용">
-      <button class="btn-big" onclick="saveAll()">전체 저장하기</button>
+      <input class="field-input" type="text" id="memoInput" placeholder="예: 여름용, 무신사 저장">
+      <button class="btn-big" onclick="saveSelected()">선택한 사진 저장하기</button>
     </div>
   </div>
 </div>
 
+<!-- 설정 -->
+<div class="page" id="page-setting">
+  <div class="sec-title">설정</div>
+  <div class="sec-sub">Google Drive 연동</div>
+
+  <div class="setting-card">
+    <h3>Google Drive API 키</h3>
+    <div class="setting-desc">Google Cloud Console에서 발급한 API 키를 입력해주세요. 이 기기에만 저장돼요.</div>
+    <input class="field-input" type="password" id="apiKeyInput" placeholder="AIza...">
+    <div style="margin-top:8px;font-size:0.72rem;color:var(--muted)" id="apiStatus"></div>
+  </div>
+
+  <div class="setting-card">
+    <h3>Drive 폴더 ID</h3>
+    <div class="setting-desc">Drive 폴더 주소의 folders/ 뒤 문자열이에요. 폴더는 반드시 공개 설정이어야 해요.</div>
+    <input class="field-input" type="text" id="folderIdInput" placeholder="1AbCdEfG...">
+  </div>
+
+  <button class="btn-big" onclick="saveSettings()">저장하기</button>
+  <div style="margin-top:12px;font-size:0.72rem;color:var(--muted);text-align:center" id="settingStatus"></div>
+</div>
+
 <script>
 // ── 컬러 팔레트 ──────────────────────────────────────
-const COLORS = [
+const COLORS=[
   {name:'블랙',hex:'#1a1a1a'},{name:'화이트',hex:'#f0f0eb'},{name:'그레이',hex:'#8a8a8a'},
   {name:'베이지',hex:'#d4c4a8'},{name:'카멜',hex:'#c4956a'},{name:'브라운',hex:'#6b4c3b'},
   {name:'네이비',hex:'#2c3e6b'},{name:'블루',hex:'#5a8ab8'},{name:'데님',hex:'#6b8fa8'},
   {name:'그린',hex:'#6b8a6b'},{name:'카키',hex:'#8a8a5a'},{name:'레드',hex:'#c44a4a'},
   {name:'핑크',hex:'#e8a0b8'},{name:'라벤더',hex:'#b8a0d8'},{name:'옐로우',hex:'#e8d04a'},{name:'오렌지',hex:'#e8904a'},
 ];
-
-function renderColorChips(id, selected=[]) {
-  document.getElementById(id).innerHTML = COLORS.map(c=>`
-    <div class="color-chip ${selected.includes(c.name)?'on':''}" style="background:${c.hex}" data-name="${c.name}" title="${c.name}" onclick="this.classList.toggle('on')"></div>`).join('');
+function renderColorChips(id,selected=[]){
+  document.getElementById(id).innerHTML=COLORS.map(c=>`<div class="color-chip ${selected.includes(c.name)?'on':''}" style="background:${c.hex}" data-name="${c.name}" title="${c.name}" onclick="this.classList.toggle('on')"></div>`).join('');
 }
-function getSelectedColors(id) {
-  return [...document.querySelectorAll(`#${id} .color-chip.on`)].map(c=>c.dataset.name);
-}
+function getSelectedColors(id){return[...document.querySelectorAll(`#${id} .color-chip.on`)].map(c=>c.dataset.name);}
 renderColorChips('colorFilterChips');
 
+// ── 설정 ──────────────────────────────────────────────
+const FOLDER_ID = '176HrbZw2F9yYPk28kpgtYQ7jjZnP6i36';
+
+function getSettings(){
+  return {
+    apiKey: localStorage.getItem('driveApiKey')||'',
+    folderId: localStorage.getItem('driveFolderId')||FOLDER_ID
+  };
+}
+function saveSettings(){
+  const key=document.getElementById('apiKeyInput').value.trim();
+  const fid=document.getElementById('folderIdInput').value.trim();
+  if(!key){alert('API 키를 입력해주세요!');return;}
+  localStorage.setItem('driveApiKey', key);
+  localStorage.setItem('driveFolderId', fid||FOLDER_ID);
+  document.getElementById('settingStatus').textContent='✓ 저장됐어요!';
+  setTimeout(()=>document.getElementById('settingStatus').textContent='',2000);
+}
+
+// 설정 페이지 진입시 기존값 채우기
+function initSettings(){
+  const s=getSettings();
+  if(s.apiKey) document.getElementById('apiKeyInput').value=s.apiKey;
+  document.getElementById('folderIdInput').value=s.folderId;
+}
+
 // ── 날씨 ──────────────────────────────────────────────
-let W = {temp:null, tempKey:'mild', rain:false};
-async function fetchWeather() {
-  try {
-    const pos = await new Promise((res,rej)=>navigator.geolocation.getCurrentPosition(res,rej,{timeout:6000}));
-    const {latitude:lat,longitude:lon} = pos.coords;
-    const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=apparent_temperature,precipitation_probability&timezone=auto&forecast_days=1`);
-    const d = await r.json();
-    const temp = Math.round(d.current_weather.temperature);
-    const code = d.current_weather.weathercode;
-    const hr = new Date().getHours();
-    const feel = d.hourly?.apparent_temperature?.[hr]!=null?Math.round(d.hourly.apparent_temperature[hr]):temp;
-    const rain = (d.hourly?.precipitation_probability?.[hr]??0)>40||[51,53,61,63,80,81,95].includes(code);
+let W={temp:null,tempKey:'mild',rain:false};
+async function fetchWeather(){
+  try{
+    const pos=await new Promise((res,rej)=>navigator.geolocation.getCurrentPosition(res,rej,{timeout:6000}));
+    const{latitude:lat,longitude:lon}=pos.coords;
+    const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=apparent_temperature,precipitation_probability&timezone=auto&forecast_days=1`);
+    const d=await r.json();
+    const temp=Math.round(d.current_weather.temperature);
+    const code=d.current_weather.weathercode;
+    const hr=new Date().getHours();
+    const feel=d.hourly?.apparent_temperature?.[hr]!=null?Math.round(d.hourly.apparent_temperature[hr]):temp;
+    const rain=(d.hourly?.precipitation_probability?.[hr]??0)>40||[51,53,61,63,80,81,95].includes(code);
     const icons={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',51:'🌦️',61:'🌧️',71:'❄️',80:'🌧️',95:'⛈️'};
     const descs={0:'맑음',1:'주로 맑음',2:'구름 조금',3:'흐림',45:'안개',51:'이슬비',61:'비',71:'눈',80:'소나기',95:'천둥번개'};
     const tempKey=temp<=5?'cold':temp<=12?'cool':temp<=19?'mild':temp<=24?'warm':'hot';
@@ -234,7 +256,7 @@ async function fetchWeather() {
     document.getElementById('wTemp').textContent=`${temp}°C  체감 ${feel}°C`;
     document.getElementById('wDesc').textContent=(descs[code]||'맑음')+(rain?' ☔':'');
     document.getElementById('wTag').textContent=feelLabel;
-  } catch {
+  }catch{
     const m=new Date().getMonth()+1;
     const season=m<=2||m===12?'겨울':m<=5?'봄':m<=8?'여름':'가을';
     W={temp:null,tempKey:'mild',rain:false};
@@ -246,54 +268,113 @@ async function fetchWeather() {
 fetchWeather();
 
 // ── 페이지 전환 ──────────────────────────────────────
-function showPage(id) {
+function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
-  document.querySelectorAll('.nav-tab')[{recommend:0,closet:1,add:2}[id]].classList.add('active');
+  document.querySelectorAll('.nav-tab')[{recommend:0,closet:1,add:2,setting:3}[id]].classList.add('active');
   if(id==='closet') renderCloset();
+  if(id==='setting') initSettings();
 }
 document.querySelectorAll('.chips').forEach(g=>g.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>c.classList.toggle('on'))));
 
-// ── 로컬스토리지 ──────────────────────────────────────
+// ── localStorage ──────────────────────────────────────
 function getOutfits(){try{return JSON.parse(localStorage.getItem('myOutfits')||'[]');}catch{return[];}}
-function saveOutfits(arr){localStorage.setItem('myOutfits',JSON.stringify(arr));document.getElementById('countBadge').textContent=arr.length;}
-(()=>document.getElementById('countBadge').textContent=getOutfits().length)();
+function saveOutfits(arr){
+  try{localStorage.setItem('myOutfits',JSON.stringify(arr));document.getElementById('countBadge').textContent=arr.length;}
+  catch(e){throw e;}
+}
+document.getElementById('countBadge').textContent=getOutfits().length;
 
-// ── 색상 자동 추출 (캔버스 기반) ──────────────────────
-function extractColors(imgEl, topN=5) {
+// ── Google Drive 연동 ──────────────────────────────────
+let drivePhotos=[];
+let selectedIds=new Set();
+
+async function loadDrivePhotos(){
+  const s=getSettings();
+  if(!s.apiKey){
+    alert('설정 탭에서 API 키를 먼저 입력해주세요!');
+    showPage('setting');
+    return;
+  }
+  document.getElementById('driveGrid').style.display='none';
+  document.getElementById('driveEmpty').style.display='none';
+  document.getElementById('driveLoading').style.display='block';
+  document.getElementById('selectSection').style.display='none';
+  selectedIds.clear();
+
+  try{
+    const url=`https://www.googleapis.com/drive/v3/files?q='${s.folderId}'+in+parents+and+mimeType+contains+'image/'&fields=files(id,name,thumbnailLink,mimeType)&key=${s.apiKey}&pageSize=100`;
+    const r=await fetch(url);
+    const d=await r.json();
+    if(d.error) throw new Error(d.error.message);
+    drivePhotos=d.files||[];
+    document.getElementById('driveLoading').style.display='none';
+    if(!drivePhotos.length){
+      document.getElementById('driveEmpty').style.display='block';
+      return;
+    }
+    renderDriveGrid();
+  }catch(e){
+    document.getElementById('driveLoading').style.display='none';
+    alert('Drive 불러오기 실패: '+e.message+'\nAPI 키와 폴더 공개 설정을 확인해주세요.');
+  }
+}
+
+function renderDriveGrid(){
+  const existing=getOutfits().map(o=>o.driveId).filter(Boolean);
+  const grid=document.getElementById('driveGrid');
+  grid.style.display='grid';
+  grid.innerHTML=drivePhotos.map(f=>{
+    const already=existing.includes(f.id);
+    const imgUrl=`https://drive.google.com/thumbnail?id=${f.id}&sz=w400`;
+    return`<div class="drive-item ${already?'already':''}" id="di-${f.id}" onclick="toggleDriveSelect('${f.id}')" title="${f.name}">
+      <img src="${imgUrl}" alt="${f.name}" onerror="this.src=''">
+      <div class="check">✓</div>
+      ${already?`<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.6);font-size:0.6rem;color:#aaa;text-align:center;padding:2px">저장됨</div>`:''}
+    </div>`;
+  }).join('');
+  document.getElementById('selectSection').style.display='block';
+}
+
+function toggleDriveSelect(id){
+  const el=document.getElementById('di-'+id);
+  if(selectedIds.has(id)){selectedIds.delete(id);el.classList.remove('selected');}
+  else{selectedIds.add(id);el.classList.add('selected');}
+}
+
+// ── 색상 추출 ──────────────────────────────────────────
+function extractColors(imgEl,topN=4){
   return new Promise(res=>{
-    const canvas = document.createElement('canvas');
-    const size = 80;
-    canvas.width = size; canvas.height = size;
-    const ctx = canvas.getContext('2d');
-    try {
-      ctx.drawImage(imgEl, 0, 0, size, size);
-      const data = ctx.getImageData(0, 0, size, size).data;
-      const buckets = {};
-      for(let i=0;i<data.length;i+=16) {
+    const canvas=document.createElement('canvas');
+    canvas.width=60;canvas.height=60;
+    const ctx=canvas.getContext('2d');
+    try{
+      ctx.drawImage(imgEl,0,0,60,60);
+      const data=ctx.getImageData(0,0,60,60).data;
+      const buckets={};
+      for(let i=0;i<data.length;i+=16){
         const r=Math.round(data[i]/32)*32;
         const g=Math.round(data[i+1]/32)*32;
         const b=Math.round(data[i+2]/32)*32;
-        if(data[i+3]<128) continue; // 투명 스킵
-        const key=`${r},${g},${b}`;
-        buckets[key]=(buckets[key]||0)+1;
+        if(data[i+3]<128)continue;
+        const k=`${r},${g},${b}`;
+        buckets[k]=(buckets[k]||0)+1;
       }
-      // 가장 많이 나온 컬러들을 팔레트에 매핑
       const sorted=Object.entries(buckets).sort((a,b)=>b[1]-a[1]).slice(0,20);
       const matched=new Set();
-      for(const [key] of sorted) {
-        const [r,g,b]=key.split(',').map(Number);
+      for(const[key]of sorted){
+        const[r,g,b]=key.split(',').map(Number);
         const name=matchColor(r,g,b);
-        if(name) matched.add(name);
-        if(matched.size>=topN) break;
+        if(name)matched.add(name);
+        if(matched.size>=topN)break;
       }
       res([...matched]);
-    } catch { res([]); }
+    }catch{res([]);}
   });
 }
 
-function matchColor(r,g,b) {
+function matchColor(r,g,b){
   const targets=[
     {name:'블랙',r:20,g:20,b:20},{name:'화이트',r:240,g:238,b:232},
     {name:'그레이',r:138,g:138,b:138},{name:'베이지',r:212,g:196,b:168},
@@ -304,136 +385,65 @@ function matchColor(r,g,b) {
     {name:'핑크',r:232,g:160,b:184},{name:'라벤더',r:184,g:160,b:216},
     {name:'옐로우',r:232,g:208,b:74},{name:'오렌지',r:232,g:144,b:74},
   ];
-  let best=null, bestDist=Infinity;
-  for(const t of targets) {
-    const d=Math.sqrt((r-t.r)**2+(g-t.g)**2+(b-t.b)**2);
-    if(d<bestDist){bestDist=d;best=t.name;}
-  }
-  return bestDist<80 ? best : null;
+  let best=null,bestDist=Infinity;
+  for(const t of targets){const d=Math.sqrt((r-t.r)**2+(g-t.g)**2+(b-t.b)**2);if(d<bestDist){bestDist=d;best=t.name;}}
+  return bestDist<80?best:null;
 }
 
-// 날씨 자동 추정 (색상 기반 단순 로직)
-function guessWeather(colors) {
-  const warm=['레드','오렌지','옐로우','핑크'];
-  const cool=['네이비','블루','데님','그린','카키'];
-  const dark=['블랙','브라운','네이비'];
-  if(dark.filter(c=>colors.includes(c)).length>=2) return ['cold','cool','mild'];
-  if(warm.filter(c=>colors.includes(c)).length>=1) return ['warm','hot'];
-  return ['mild','warm'];
+function guessWeather(colors){
+  const dark=['블랙','브라운','네이비','카키'];
+  const light=['화이트','베이지','핑크','라벤더','옐로우'];
+  if(dark.filter(c=>colors.includes(c)).length>=2)return['cold','cool','mild'];
+  if(light.filter(c=>colors.includes(c)).length>=1)return['mild','warm','hot'];
+  return['mild','warm'];
 }
 
-// ── 배치 처리 ──────────────────────────────────────────
-let batchItems=[];
-
-document.getElementById('fileInput').addEventListener('change', async e=>{
-  const files=[...e.target.files]; if(!files.length) return;
-  document.getElementById('batchQueue').style.display='block';
-  document.getElementById('tagSection').style.display='block';
-  for(const file of files) {
-    const id=Date.now()+Math.random();
-    const imageData=await readFile(file);
-    const item={id, imageData, name:file.name.replace(/\.[^.]+$/,''), colors:[], weathers:[], status:'extracting'};
-    batchItems.push(item);
-    renderBatchItem(item);
-    await extractColorsFromData(item);
-    renderBatchItem(item);
-  }
-  e.target.value='';
-});
-
-function addFromUrl() {
-  const url=document.getElementById('urlInput').value.trim(); if(!url) return;
-  const id=Date.now()+Math.random();
-  const item={id, imageData:url, name:'URL 코디', colors:[], weathers:[], status:'extracting'};
-  batchItems.push(item);
-  document.getElementById('batchQueue').style.display='block';
-  document.getElementById('tagSection').style.display='block';
-  renderBatchItem(item);
-  extractColorsFromData(item).then(()=>renderBatchItem(item));
-  document.getElementById('urlInput').value='';
-}
-
-function readFile(file) {
-  return new Promise(res=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.readAsDataURL(file);});
-}
-
-async function extractColorsFromData(item) {
-  return new Promise(res=>{
-    const img=new Image();
-    img.crossOrigin='anonymous';
-    img.onload=async ()=>{
-      item.colors=await extractColors(img);
-      item.weathers=guessWeather(item.colors);
-      item.status='done';
-      res();
-    };
-    img.onerror=()=>{item.status='done';res();};
-    img.src=item.imageData;
-  });
-}
-
-function renderBatchItem(item) {
-  const existing=document.getElementById('bi-'+item.id);
-  const colorDots=(item.colors||[]).map(cn=>{const c=COLORS.find(x=>x.name===cn);return c?`<div class="batch-color-dot" style="background:${c.hex}" title="${cn}"></div>`:''}).join('');
-  const statusHtml=item.status==='extracting'
-    ?`<div class="batch-status extracting"><span class="spinner-dot"></span> 색상 추출 중...</div>`
-    :`<div class="batch-status done">✓ 완료 · ${item.colors.join(', ')||'색상 없음'}</div>`;
-  const html=`
-    <div class="batch-item" id="bi-${item.id}">
-      <img class="batch-thumb" src="${item.imageData}" alt="">
-      <div class="batch-info">
-        <div class="batch-name">${item.name}</div>
-        <div class="batch-colors">${colorDots}</div>
-        ${statusHtml}
-      </div>
-      <button onclick="removeBatchItem(${item.id})" style="background:none;border:none;color:var(--danger);font-size:1.1rem;cursor:pointer;padding:4px;">✕</button>
-    </div>`;
-  if(existing) existing.outerHTML=html;
-  else document.getElementById('batchQueue').insertAdjacentHTML('beforeend',html);
-}
-
-function removeBatchItem(id) {
-  batchItems=batchItems.filter(i=>i.id!==id);
-  document.getElementById('bi-'+id)?.remove();
-  if(!batchItems.length){
-    document.getElementById('batchQueue').style.display='none';
-    document.getElementById('tagSection').style.display='none';
-  }
-}
-
-// ── 저장 ──────────────────────────────────────────────
-function saveAll() {
-  if(!batchItems.length){alert('사진을 추가해주세요!');return;}
+// ── Drive 사진 저장 ──────────────────────────────────
+async function saveSelected(){
+  if(!selectedIds.size){alert('사진을 선택해주세요!');return;}
   const occasions=[...document.querySelectorAll('#addOccasionChips .chip.on')].map(c=>c.dataset.val);
   const memo=document.getElementById('memoInput').value.trim();
+  const selected=drivePhotos.filter(f=>selectedIds.has(f.id));
   const existing=getOutfits();
-  const newItems=batchItems.map(item=>({
-    id:Date.now()+Math.random(),
-    name:item.name,
-    image:item.imageData,
-    colors:item.colors||[],
-    weathers:item.weathers||[],
-    occasions,
-    memo,
-    createdAt:new Date().toLocaleDateString('ko-KR')
+
+  const newItems=await Promise.all(selected.map(async f=>{
+    const imgUrl=`https://drive.google.com/thumbnail?id=${f.id}&sz=w800`;
+    // 색상 추출
+    let colors=[];
+    try{
+      const img=new Image();
+      img.crossOrigin='anonymous';
+      await new Promise(res=>{img.onload=res;img.onerror=res;img.src=imgUrl;});
+      colors=await extractColors(img);
+    }catch{}
+    return{
+      id:Date.now()+Math.random(),
+      driveId:f.id,
+      name:f.name.replace(/\.[^.]+$/,''),
+      image:imgUrl,
+      colors,
+      weathers:guessWeather(colors),
+      occasions,
+      memo,
+      createdAt:new Date().toLocaleDateString('ko-KR')
+    };
   }));
-  saveOutfits([...newItems,...existing]);
-  const count=newItems.length;
-  // 초기화
-  batchItems=[];
-  document.getElementById('batchQueue').innerHTML='';
-  document.getElementById('batchQueue').style.display='none';
-  document.getElementById('tagSection').style.display='none';
-  document.getElementById('fileInput').value='';
-  document.getElementById('urlInput').value='';
-  document.getElementById('memoInput').value='';
-  document.querySelectorAll('#addOccasionChips .chip').forEach(c=>c.classList.remove('on'));
-  alert(count+'개 저장됐어요! 🎉');
-  showPage('closet');
+
+  try{
+    saveOutfits([...newItems,...existing]);
+    alert(newItems.length+'개 저장됐어요! 🎉');
+    // 초기화
+    selectedIds.clear();
+    document.getElementById('memoInput').value='';
+    document.querySelectorAll('#addOccasionChips .chip').forEach(c=>c.classList.remove('on'));
+    showPage('closet');
+  }catch{
+    alert('저장 공간이 부족해요.\n옷장에서 일부 코디를 삭제해주세요.');
+  }
 }
 
 // ── 옷장 렌더링 ──────────────────────────────────────
-function renderCloset() {
+function renderCloset(){
   const list=getOutfits();
   const grid=document.getElementById('closetGrid');
   const empty=document.getElementById('closetEmpty');
@@ -453,11 +463,11 @@ function renderCloset() {
 function deleteOutfit(id){if(!confirm('삭제할까요?'))return;saveOutfits(getOutfits().filter(o=>String(o.id)!==String(id)));renderCloset();}
 
 // ── 추천 ──────────────────────────────────────────────
-function recommend() {
+function recommend(){
   const list=getOutfits();
   const ra=document.getElementById('resultArea');
   if(!list.length){
-    ra.innerHTML=`<div class="empty"><div class="empty-icon">👗</div><p>옷장이 비어있어요!<br>+ 추가 탭에서 코디를 먼저 저장해보세요.</p></div>`;
+    ra.innerHTML=`<div class="empty"><div class="empty-icon">👗</div><p>옷장이 비어있어요!<br>+ 추가 탭에서 Drive 사진을 가져오세요.</p></div>`;
     return;
   }
   const selOccasions=[...document.querySelectorAll('#occasionChips .chip.on')].map(c=>c.dataset.val);
@@ -466,20 +476,14 @@ function recommend() {
 
   const scored=list.map(o=>{
     let s=0;
-    // 날씨
     const order=['cold','cool','mild','warm','hot'];
     const wi=order.indexOf(W.tempKey);
-    if((o.weathers||[]).includes(W.tempKey)) s+=8;
-    else (o.weathers||[]).forEach(w=>{const oi=order.indexOf(w);if(Math.abs(wi-oi)===1)s+=3;});
-    // 일정
-    if(selOccasions.length===0) s+=2;
-    else s+=selOccasions.filter(oc=>(o.occasions||[]).includes(oc)).length*5;
-    // 컬러
-    if(selColors.length>0) s+=selColors.filter(c=>(o.colors||[]).includes(c)).length*3;
-    // 텍스트
-    if(ft&&(o.name.toLowerCase().includes(ft)||(o.memo||'').toLowerCase().includes(ft))) s+=4;
-    // 비
-    if(W.rain&&(o.name.includes('코트')||o.name.includes('재킷')||(o.memo||'').includes('방수'))) s+=2;
+    if((o.weathers||[]).includes(W.tempKey))s+=8;
+    else(o.weathers||[]).forEach(w=>{const oi=order.indexOf(w);if(Math.abs(wi-oi)===1)s+=3;});
+    if(selOccasions.length===0)s+=2;else s+=selOccasions.filter(oc=>(o.occasions||[]).includes(oc)).length*5;
+    if(selColors.length>0)s+=selColors.filter(c=>(o.colors||[]).includes(c)).length*3;
+    if(ft&&(o.name.toLowerCase().includes(ft)||(o.memo||'').toLowerCase().includes(ft)))s+=4;
+    if(W.rain&&(o.name.includes('코트')||o.name.includes('재킷')||(o.memo||'').includes('방수')))s+=2;
     s+=Math.random()*1.5;
     return{...o,s};
   });
@@ -489,14 +493,11 @@ function recommend() {
   ra.innerHTML=`<div style="font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">오늘의 픽</div>`;
   top.forEach((o,i)=>{
     const card=document.createElement('div');
-    card.className='r-card'; card.style.animationDelay=`${i*0.12}s`;
+    card.className='r-card';card.style.animationDelay=`${i*0.12}s`;
     const colorDots=(o.colors||[]).map(cn=>{const c=COLORS.find(x=>x.name===cn);return c?`<div class="r-color-dot" style="background:${c.hex}" title="${cn}"></div>`:''}).join('');
     const tags=(o.occasions||[]).map(t=>`<span class="r-tag">${t}</span>`).join('');
     card.innerHTML=`
-      <div class="r-card-header">
-        <div class="r-card-title">${o.name}</div>
-        <div class="r-occasion">${(o.occasions||[])[0]||'—'}</div>
-      </div>
+      <div class="r-card-header"><div class="r-card-title">${o.name}</div><div class="r-occasion">${(o.occasions||[])[0]||'—'}</div></div>
       ${o.image?`<img class="r-photo" src="${o.image}" alt="${o.name}">`:`<div class="r-photo-placeholder">👗</div>`}
       <div class="r-body">
         <div class="r-colors">${colorDots}</div>
