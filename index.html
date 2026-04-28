@@ -96,6 +96,16 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
 .upload-zone span{font-size:0.75rem;color:var(--muted);z-index:1;}
 .upload-zone .upload-icon{font-size:2rem;z-index:1;}
 #fileInput{display:none;}
+.batch-item{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px;display:flex;gap:12px;align-items:flex-start;margin-bottom:8px;}
+.batch-thumb{width:56px;height:72px;border-radius:8px;object-fit:cover;flex-shrink:0;background:var(--bg);}
+.batch-info{flex:1;min-width:0;}
+.batch-name{font-size:0.8rem;font-weight:500;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.batch-status{font-size:0.72rem;color:var(--muted);}
+.batch-status.analyzing{color:var(--accent2);}
+.batch-status.done{color:#6ab87a;}
+.batch-status.error{color:var(--danger);}
+.batch-tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:5px;}
+.batch-tag{padding:1px 7px;border-radius:6px;background:var(--tag-bg);font-size:0.62rem;color:var(--muted);border:1px solid var(--border);}
 
 /* 자동 태그 결과 박스 */
 .auto-tag-box{background:var(--tag-bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-top:12px;font-size:0.78rem;line-height:1.7;color:var(--text);display:none;}
@@ -170,13 +180,13 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
   <div class="sec-sub">사진 올리면 AI가 태그 자동으로 달아줘요</div>
   <div class="add-card">
 
-    <div class="field-label">사진 업로드</div>
+    <div class="field-label">사진 업로드 (여러 장 동시 선택 가능)</div>
     <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
       <div class="upload-icon">📷</div>
-      <span>탭해서 사진 선택</span>
-      <img id="previewImg" style="display:none">
+      <span>탭해서 사진 선택 (여러 장 OK)</span>
     </div>
-    <input type="file" id="fileInput" accept="image/*">
+    <input type="file" id="fileInput" accept="image/*" multiple>
+    <div id="batchQueue" style="display:none;margin-top:12px;"></div>
 
     <div class="divider"></div>
     <div class="field-label">또는 이미지 URL</div>
@@ -185,61 +195,10 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
       <button class="btn-big" style="width:auto;padding:10px 16px;margin:0;font-size:0.75rem;" onclick="previewUrl()">불러오기</button>
     </div>
 
-    <!-- AI 분석 상태 -->
-    <div class="ai-status" id="aiStatus">
-      <div class="ai-dot"></div>
-      <span>AI가 코디 분석 중...</span>
-    </div>
-
-    <!-- 자동 태그 결과 -->
-    <div class="auto-tag-box" id="autoTagBox">
-      <div class="at-label">AI 분석 결과</div>
-      <div id="autoTagResult"></div>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="field-label">코디 이름</div>
-    <input class="field-input" type="text" id="nameInput" placeholder="AI가 자동으로 지어줘요 (직접 입력도 가능)">
-
-    <div class="field-label">무드 (AI 추천 + 수정 가능)</div>
-    <div class="chips" id="addMoodChips">
-      <div class="chip" data-val="스트릿">스트릿</div>
-      <div class="chip" data-val="미니멀">미니멀</div>
-      <div class="chip" data-val="페미닌">페미닌</div>
-      <div class="chip" data-val="Y2K">Y2K</div>
-      <div class="chip" data-val="오피스">오피스</div>
-      <div class="chip" data-val="올드머니">올드머니</div>
-      <div class="chip" data-val="고프코어">고프코어</div>
-      <div class="chip" data-val="빈티지">빈티지</div>
-    </div>
-
-    <div class="field-label">일정 (AI 추천 + 수정 가능)</div>
-    <div class="chips" id="addOccasionChips">
-      <div class="chip" data-val="출근">출근</div>
-      <div class="chip" data-val="데이트">데이트</div>
-      <div class="chip" data-val="주말외출">주말 외출</div>
-      <div class="chip" data-val="쇼핑">쇼핑</div>
-      <div class="chip" data-val="모임">모임</div>
-      <div class="chip" data-val="집콕">집콕</div>
-    </div>
-
-    <div class="field-label">날씨 (AI 추천 + 수정 가능)</div>
-    <div class="chips" id="addWeatherChips">
-      <div class="chip" data-val="cold">패딩 각 (5°↓)</div>
-      <div class="chip" data-val="cool">아우터 필수 (6~12°)</div>
-      <div class="chip" data-val="mild">가디건 정도 (13~19°)</div>
-      <div class="chip" data-val="warm">딱 좋음 (20~24°)</div>
-      <div class="chip" data-val="hot">민소매 각 (25°↑)</div>
-    </div>
-
-    <div class="field-label">컬러 (AI 추천 + 수정 가능)</div>
-    <div class="color-chips" id="addColorChips"></div>
-
-    <div class="field-label">메모 (선택)</div>
+    <div class="field-label">메모 (선택 · 모든 사진에 공통 적용)</div>
     <input class="field-input" type="text" id="memoInput" placeholder="예: 무신사 저장, 데이트 때 입었던 거">
 
-    <button class="btn-big" onclick="saveOutfit()">저장하기</button>
+    <button class="btn-big" id="saveBtn" onclick="saveOutfit()">전체 저장하기</button>
   </div>
 </div>
 
@@ -283,7 +242,7 @@ function getSelectedColors(containerId) {
   return [...document.querySelectorAll(`#${containerId} .color-chip.on`)].map(c=>c.dataset.name);
 }
 
-renderColorChips('addColorChips');
+
 renderColorChips('colorFilterChips');
 
 // ── 날씨 ──────────────────────────────────────────────
@@ -339,46 +298,89 @@ function updateCount(){document.getElementById('countBadge').textContent=getOutf
 updateCount();
 
 // ── 이미지 처리 ──────────────────────────────────────
-let currentImageData = null;
+let batchItems = []; // {id, imageData, name, moods, occasions, weathers, colors, status}
 
-document.getElementById('fileInput').addEventListener('change', e=>{
-  const file=e.target.files[0]; if(!file) return;
-  const reader=new FileReader();
-  reader.onload=ev=>{
-    currentImageData=ev.target.result;
-    showPreview(currentImageData);
-    analyzeImage(currentImageData, 'base64');
-  };
-  reader.readAsDataURL(file);
+document.getElementById('fileInput').addEventListener('change', async e=>{
+  const files = [...e.target.files];
+  if(!files.length) return;
+  const queueEl = document.getElementById('batchQueue');
+  queueEl.style.display = 'block';
+
+  for(const file of files) {
+    const id = Date.now() + Math.random();
+    const imageData = await readFileAsBase64(file);
+    const item = {id, imageData, name:'', moods:[], occasions:[], weathers:[], colors:[], status:'analyzing'};
+    batchItems.push(item);
+    renderBatchItem(item);
+    // AI 분석 (순차)
+    try {
+      const result = await analyzeImageBatch(imageData);
+      item.name = result.name || file.name.replace(/\.[^.]+$/, '');
+      item.moods = result.moods || [];
+      item.occasions = result.occasions || [];
+      item.weathers = result.weathers || [];
+      item.colors = result.colors || [];
+      item.status = 'done';
+    } catch {
+      item.name = file.name.replace(/\.[^.]+$/, '');
+      item.status = 'error';
+    }
+    renderBatchItem(item);
+  }
+  e.target.value = '';
 });
+
+function readFileAsBase64(file) {
+  return new Promise(res => {
+    const reader = new FileReader();
+    reader.onload = ev => res(ev.target.result);
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderBatchItem(item) {
+  const existing = document.getElementById('batch-'+item.id);
+  const tags = [...item.moods, ...item.occasions].slice(0,4).map(t=>`<span class="batch-tag">${t}</span>`).join('');
+  const statusText = {analyzing:'AI 분석 중...', done:'분석 완료 ✓', error:'분석 실패 (기본값 저장)'}[item.status];
+  const html = `
+    <div class="batch-item" id="batch-${item.id}">
+      <img class="batch-thumb" src="${item.imageData}" alt="">
+      <div class="batch-info">
+        <div class="batch-name">${item.name||'분석 중...'}</div>
+        <div class="batch-status ${item.status}">${statusText}</div>
+        <div class="batch-tags">${tags}</div>
+      </div>
+    </div>`;
+  if(existing) existing.outerHTML = html;
+  else document.getElementById('batchQueue').insertAdjacentHTML('beforeend', html);
+}
 
 function previewUrl(){
   const url=document.getElementById('urlInput').value.trim(); if(!url) return;
-  currentImageData=url;
-  showPreview(url);
-  analyzeImage(url, 'url');
-}
-
-function showPreview(src){
-  const img=document.getElementById('previewImg');
-  img.src=src; img.style.display='block';
-  img.onerror=()=>{img.style.display='none';currentImageData=null;alert('이미지를 불러올 수 없어요.');};
-  document.querySelector('#uploadZone .upload-icon').style.display='none';
-  document.querySelector('#uploadZone span').style.display='none';
+  const id = Date.now();
+  const item = {id, imageData:url, name:'', moods:[], occasions:[], weathers:[], colors:[], status:'analyzing'};
+  batchItems.push(item);
+  document.getElementById('batchQueue').style.display='block';
+  renderBatchItem(item);
+  analyzeImageBatch(url, 'url').then(result=>{
+    item.name = result.name || 'URL 코디';
+    item.moods = result.moods||[];
+    item.occasions = result.occasions||[];
+    item.weathers = result.weathers||[];
+    item.colors = result.colors||[];
+    item.status='done';
+    renderBatchItem(item);
+  }).catch(()=>{item.name='URL 코디';item.status='error';renderBatchItem(item);});
+  document.getElementById('urlInput').value='';
 }
 
 // ── AI 이미지 분석 ──────────────────────────────────
-async function analyzeImage(imageData, type) {
-  const statusEl = document.getElementById('aiStatus');
-  const boxEl = document.getElementById('autoTagBox');
-  const resultEl = document.getElementById('autoTagResult');
-  statusEl.classList.add('show');
-  boxEl.classList.remove('show');
-
+async function analyzeImageBatch(imageData, type) {
+  const isUrl = typeof imageData === 'string' && imageData.startsWith('http');
   try {
-    const imageContent = type === 'base64'
-      ? { type: 'base64', media_type: 'image/jpeg', data: imageData.split(',')[1] }
-      : { type: 'url', url: imageData };
+    const imageContent = isUrl
+      ? { type: 'url', url: imageData }
+      : { type: 'base64', media_type: 'image/jpeg', data: imageData.split(',')[1] };
 
     const prompt = `이 코디 사진을 분석해서 아래 형식으로만 답해줘. 다른 말 없이 JSON만 출력해.
 
@@ -412,75 +414,47 @@ async function analyzeImage(imageData, type) {
     const text = data.content?.map(c=>c.text||'').join('');
     const json = JSON.parse(text.replace(/```json|```/g,'').trim());
 
-    // 이름 자동 채우기
-    if(json.name && !document.getElementById('nameInput').value) {
-      document.getElementById('nameInput').value = json.name;
-    }
-
-    // 무드 칩 자동 선택
-    document.querySelectorAll('#addMoodChips .chip').forEach(c=>{
-      if(json.moods?.includes(c.dataset.val)) c.classList.add('on');
-    });
-
-    // 일정 칩 자동 선택
-    document.querySelectorAll('#addOccasionChips .chip').forEach(c=>{
-      if(json.occasions?.includes(c.dataset.val)) c.classList.add('on');
-    });
-
-    // 날씨 칩 자동 선택
-    document.querySelectorAll('#addWeatherChips .chip').forEach(c=>{
-      if(json.weathers?.includes(c.dataset.val)) c.classList.add('on');
-    });
-
-    // 컬러 칩 자동 선택
-    renderColorChips('addColorChips', json.colors||[]);
-
-    // 결과 표시
-    resultEl.innerHTML = `
-      <div>${json.summary||''}</div>
-      <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;">
-        ${(json.colors||[]).map(c=>{
-          const col=COLORS.find(x=>x.name===c);
-          return col?`<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:0.68rem;"><span style="width:10px;height:10px;border-radius:50%;background:${col.hex};display:inline-block;"></span>${c}</span>`:'';
-        }).join('')}
-      </div>`;
-    boxEl.classList.add('show');
-
+    return json;
   } catch(e) {
-    resultEl.innerHTML = `<span style="color:var(--muted)">분석 실패. 태그를 직접 선택해주세요.</span>`;
-    boxEl.classList.add('show');
+    throw e;
   }
-  statusEl.classList.remove('show');
 }
 
 // ── 저장 ──────────────────────────────────────────────
 function saveOutfit() {
-  let name=document.getElementById('nameInput').value.trim();
-  if(!name) name = '코디 ' + new Date().toLocaleDateString('ko-KR');
-  if(!currentImageData){alert('사진을 추가해주세요!');return;}
-  const moods=[...document.querySelectorAll('#addMoodChips .chip.on')].map(c=>c.dataset.val);
-  const occasions=[...document.querySelectorAll('#addOccasionChips .chip.on')].map(c=>c.dataset.val);
-  const weathers=[...document.querySelectorAll('#addWeatherChips .chip.on')].map(c=>c.dataset.val);
-  const colors=getSelectedColors('addColorChips');
-  const memo=document.getElementById('memoInput').value.trim();
-  const outfit={id:Date.now(),name,image:currentImageData,moods,occasions,weathers,colors,memo,createdAt:new Date().toLocaleDateString('ko-KR')};
-  const list=getOutfits(); list.unshift(outfit); saveOutfits(list);
+  if(!batchItems.length){alert('사진을 추가해주세요!');return;}
+  const analyzing = batchItems.filter(i=>i.status==='analyzing');
+  if(analyzing.length){alert('AI 분석 중이에요. 잠시 후 저장해주세요!');return;}
+  
+  const list = getOutfits();
+  const memo = document.getElementById('memoInput').value.trim();
+  
+  batchItems.forEach(item=>{
+    const outfit={
+      id: item.id,
+      name: item.name || ('코디 '+new Date().toLocaleDateString('ko-KR')),
+      image: item.imageData,
+      moods: item.moods,
+      occasions: item.occasions,
+      weathers: item.weathers,
+      colors: item.colors,
+      memo,
+      createdAt: new Date().toLocaleDateString('ko-KR')
+    };
+    list.unshift(outfit);
+  });
+  saveOutfits(list);
 
   // 초기화
-  currentImageData=null;
-  document.getElementById('previewImg').style.display='none';
-  document.getElementById('previewImg').src='';
-  document.querySelector('#uploadZone .upload-icon').style.display='';
-  document.querySelector('#uploadZone span').style.display='';
+  batchItems=[];
+  document.getElementById('batchQueue').style.display='none';
+  document.getElementById('batchQueue').innerHTML='';
   document.getElementById('fileInput').value='';
   document.getElementById('urlInput').value='';
-  document.getElementById('nameInput').value='';
   document.getElementById('memoInput').value='';
-  document.querySelectorAll('#addMoodChips .chip,#addOccasionChips .chip,#addWeatherChips .chip').forEach(c=>c.classList.remove('on'));
-  renderColorChips('addColorChips');
-  document.getElementById('autoTagBox').classList.remove('show');
 
-  alert('저장됐어요! 🎉');
+  alert('코디가 저장됐어요! 🎉');
+  batchItems=[];
   showPage('closet');
 }
 
