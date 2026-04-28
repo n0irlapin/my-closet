@@ -147,16 +147,17 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
 <!-- 추가 -->
 <div class="page" id="page-add">
   <div class="sec-title">코디 추가</div>
-  <div class="sec-sub">Google Drive 폴더에서 사진 선택</div>
+  <div class="sec-sub">Drive 폴더의 새 사진을 자동으로 가져와요</div>
   <div class="add-card">
-    <button class="btn-big" style="margin-top:0" onclick="loadDrivePhotos()">📂 Drive에서 사진 불러오기</button>
-    <div id="driveGrid" class="drive-grid" style="display:none"></div>
-    <div id="driveLoading" class="drive-loading" style="display:none"><span class="spinner-dot"></span> 불러오는 중...</div>
-    <div id="driveEmpty" class="drive-loading" style="display:none">폴더에 사진이 없어요.<br>Drive MY CLOSET 폴더에 사진을 먼저 올려주세요!</div>
-
-    <div id="selectSection" style="display:none">
+    <button class="btn-big" style="margin-top:0" onclick="syncDrive()">🔄 Drive 동기화</button>
+    <div id="driveLoading" class="drive-loading" style="display:none"><span class="spinner-dot"></span> Drive 확인 중...</div>
+    <div id="driveEmpty" class="drive-loading" style="display:none">새로 추가된 사진이 없어요!<br>Drive MY CLOSET 폴더에 사진을 올린 후 동기화해주세요.</div>
+    <div id="syncResult" style="display:none">
       <div class="divider"></div>
-      <div class="field-label">일정 선택</div>
+      <div id="newPhotosInfo" style="font-size:0.82rem;color:var(--accent2);margin-bottom:12px;"></div>
+      <div id="driveGrid" class="drive-grid"></div>
+      <div class="divider"></div>
+      <div class="field-label">일정 선택 (전체 적용)</div>
       <div class="chips" id="addOccasionChips">
         <div class="chip" data-val="출근">출근</div>
         <div class="chip" data-val="데이트">데이트</div>
@@ -166,7 +167,7 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
       </div>
       <div class="field-label">메모 (선택)</div>
       <input class="field-input" type="text" id="memoInput" placeholder="예: 여름용, 무신사 저장">
-      <button class="btn-big" onclick="saveSelected()">선택한 사진 저장하기</button>
+      <button class="btn-big" onclick="saveAll()">전체 저장하기</button>
     </div>
   </div>
 </div>
@@ -286,61 +287,74 @@ function saveOutfits(arr){
 }
 document.getElementById('countBadge').textContent=getOutfits().length;
 
-// ── Google Drive 연동 ──────────────────────────────────
-let drivePhotos=[];
-let selectedIds=new Set();
+// ── Google Drive 동기화 ──────────────────────────────────
+let newDrivePhotos=[];
 
-async function loadDrivePhotos(){
+async function syncDrive(){
   const s=getSettings();
   if(!s.apiKey){
     alert('설정 탭에서 API 키를 먼저 입력해주세요!');
     showPage('setting');
     return;
   }
-  document.getElementById('driveGrid').style.display='none';
-  document.getElementById('driveEmpty').style.display='none';
   document.getElementById('driveLoading').style.display='block';
-  document.getElementById('selectSection').style.display='none';
-  selectedIds.clear();
+  document.getElementById('driveEmpty').style.display='none';
+  document.getElementById('syncResult').style.display='none';
 
   try{
-    const url=`https://www.googleapis.com/drive/v3/files?q='${s.folderId}'+in+parents+and+mimeType+contains+'image/'&fields=files(id,name,thumbnailLink,mimeType)&key=${s.apiKey}&pageSize=100`;
+    const url=`https://www.googleapis.com/drive/v3/files?q='${s.folderId}'+in+parents+and+mimeType+contains+'image/'&fields=files(id,name,mimeType)&key=${s.apiKey}&pageSize=100`;
     const r=await fetch(url);
     const d=await r.json();
     if(d.error) throw new Error(d.error.message);
-    drivePhotos=d.files||[];
+
+    const driveFiles=d.files||[];
+    const driveIds=new Set(driveFiles.map(f=>f.id));
+    const existing=getOutfits();
+
+    // Drive에 없는 항목 제거 (삭제된 사진 반영)
+    const kept=existing.filter(o=>!o.driveId||driveIds.has(o.driveId));
+    const removed=existing.length-kept.length;
+
+    // 새로 추가된 것만
+    const keptIds=new Set(kept.map(o=>o.driveId).filter(Boolean));
+    newDrivePhotos=driveFiles.filter(f=>!keptIds.has(f.id));
+
+    // 삭제된 것 먼저 반영
+    if(removed>0) saveOutfits(kept);
+
     document.getElementById('driveLoading').style.display='none';
-    if(!drivePhotos.length){
+
+    if(!newDrivePhotos.length && removed===0){
       document.getElementById('driveEmpty').style.display='block';
+      document.getElementById('driveEmpty').textContent='Drive와 이미 동기화되어 있어요!';
       return;
     }
-    renderDriveGrid();
+
+    // 안내 메시지
+    let info='';
+    if(removed>0) info+=`🗑 삭제된 사진 ${removed}장 반영됨. `;
+    if(newDrivePhotos.length>0) info+=`✨ 새 사진 ${newDrivePhotos.length}장 발견!`;
+    document.getElementById('newPhotosInfo').textContent=info;
+
+    if(newDrivePhotos.length>0){
+      document.getElementById('driveGrid').innerHTML=newDrivePhotos.map(f=>`
+        <div class="drive-item selected" style="cursor:default">
+          <img src="https://drive.google.com/thumbnail?id=${f.id}&sz=w400" alt="${f.name}" onerror="this.style.opacity=0.3">
+          <div class="check">✓</div>
+        </div>`).join('');
+    } else {
+      document.getElementById('driveGrid').innerHTML='';
+    }
+    document.getElementById('syncResult').style.display='block';
+
+    // 새 사진 없고 삭제만 있으면 저장 버튼 숨기기
+    const saveBtn=document.querySelector('#syncResult .btn-big');
+    if(saveBtn) saveBtn.style.display=newDrivePhotos.length>0?'block':'none';
+
   }catch(e){
     document.getElementById('driveLoading').style.display='none';
-    alert('Drive 불러오기 실패: '+e.message+'\nAPI 키와 폴더 공개 설정을 확인해주세요.');
+    alert('Drive 연결 실패: '+e.message+'\nAPI 키와 폴더 공개 설정을 확인해주세요.');
   }
-}
-
-function renderDriveGrid(){
-  const existing=getOutfits().map(o=>o.driveId).filter(Boolean);
-  const grid=document.getElementById('driveGrid');
-  grid.style.display='grid';
-  grid.innerHTML=drivePhotos.map(f=>{
-    const already=existing.includes(f.id);
-    const imgUrl=`https://drive.google.com/thumbnail?id=${f.id}&sz=w400`;
-    return`<div class="drive-item ${already?'already':''}" id="di-${f.id}" onclick="toggleDriveSelect('${f.id}')" title="${f.name}">
-      <img src="${imgUrl}" alt="${f.name}" onerror="this.src=''">
-      <div class="check">✓</div>
-      ${already?`<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.6);font-size:0.6rem;color:#aaa;text-align:center;padding:2px">저장됨</div>`:''}
-    </div>`;
-  }).join('');
-  document.getElementById('selectSection').style.display='block';
-}
-
-function toggleDriveSelect(id){
-  const el=document.getElementById('di-'+id);
-  if(selectedIds.has(id)){selectedIds.delete(id);el.classList.remove('selected');}
-  else{selectedIds.add(id);el.classList.add('selected');}
 }
 
 // ── 색상 추출 ──────────────────────────────────────────
@@ -398,17 +412,18 @@ function guessWeather(colors){
   return['mild','warm'];
 }
 
-// ── Drive 사진 저장 ──────────────────────────────────
-async function saveSelected(){
-  if(!selectedIds.size){alert('사진을 선택해주세요!');return;}
+// ── Drive 사진 전체 저장 ──────────────────────────────
+async function saveAll(){
+  if(!newDrivePhotos.length){alert('저장할 사진이 없어요!');return;}
+  const btn=document.querySelector('#page-add .btn-big:last-of-type');
+  if(btn){btn.disabled=true;btn.textContent='저장 중...';}
+
   const occasions=[...document.querySelectorAll('#addOccasionChips .chip.on')].map(c=>c.dataset.val);
   const memo=document.getElementById('memoInput').value.trim();
-  const selected=drivePhotos.filter(f=>selectedIds.has(f.id));
   const existing=getOutfits();
 
-  const newItems=await Promise.all(selected.map(async f=>{
+  const newItems=await Promise.all(newDrivePhotos.map(async f=>{
     const imgUrl=`https://drive.google.com/thumbnail?id=${f.id}&sz=w800`;
-    // 색상 추출
     let colors=[];
     try{
       const img=new Image();
@@ -432,14 +447,15 @@ async function saveSelected(){
   try{
     saveOutfits([...newItems,...existing]);
     alert(newItems.length+'개 저장됐어요! 🎉');
-    // 초기화
-    selectedIds.clear();
+    newDrivePhotos=[];
     document.getElementById('memoInput').value='';
     document.querySelectorAll('#addOccasionChips .chip').forEach(c=>c.classList.remove('on'));
+    document.getElementById('syncResult').style.display='none';
     showPage('closet');
   }catch{
     alert('저장 공간이 부족해요.\n옷장에서 일부 코디를 삭제해주세요.');
   }
+  if(btn){btn.disabled=false;btn.textContent='전체 저장하기';}
 }
 
 // ── 옷장 렌더링 ──────────────────────────────────────
