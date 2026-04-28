@@ -200,7 +200,7 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
     <div class="divider"></div>
 
     <div class="field-label">코디 이름</div>
-    <input class="field-input" type="text" id="nameInput" placeholder="예: 블랙 미니 데이트 룩">
+    <input class="field-input" type="text" id="nameInput" placeholder="AI가 자동으로 지어줘요 (직접 입력도 가능)">
 
     <div class="field-label">무드 (AI 추천 + 수정 가능)</div>
     <div class="chips" id="addMoodChips">
@@ -455,8 +455,8 @@ async function analyzeImage(imageData, type) {
 
 // ── 저장 ──────────────────────────────────────────────
 function saveOutfit() {
-  const name=document.getElementById('nameInput').value.trim();
-  if(!name){alert('코디 이름을 입력해주세요!');return;}
+  let name=document.getElementById('nameInput').value.trim();
+  if(!name) name = '코디 ' + new Date().toLocaleDateString('ko-KR');
   if(!currentImageData){alert('사진을 추가해주세요!');return;}
   const moods=[...document.querySelectorAll('#addMoodChips .chip.on')].map(c=>c.dataset.val);
   const occasions=[...document.querySelectorAll('#addOccasionChips .chip.on')].map(c=>c.dataset.val);
