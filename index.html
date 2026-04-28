@@ -407,7 +407,7 @@ async function analyzeImageBatch(imageData, type) {
 
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'anthropic-dangerous-direct-browser-access': 'true' },
       body: JSON.stringify(body)
     });
     const data = await res.json();
@@ -426,24 +426,22 @@ function saveOutfit() {
   const analyzing = batchItems.filter(i=>i.status==='analyzing');
   if(analyzing.length){alert('AI 분석 중이에요. 잠시 후 저장해주세요!');return;}
   
-  const list = getOutfits();
+  const existing = getOutfits();
   const memo = document.getElementById('memoInput').value.trim();
+  const count = batchItems.length;
   
-  batchItems.forEach(item=>{
-    const outfit={
-      id: item.id,
-      name: item.name || ('코디 '+new Date().toLocaleDateString('ko-KR')),
-      image: item.imageData,
-      moods: item.moods,
-      occasions: item.occasions,
-      weathers: item.weathers,
-      colors: item.colors,
-      memo,
-      createdAt: new Date().toLocaleDateString('ko-KR')
-    };
-    list.unshift(outfit);
-  });
-  saveOutfits(list);
+  const newOutfits = batchItems.map(item=>({
+    id: Date.now() + Math.random(),
+    name: item.name || ('코디 '+new Date().toLocaleDateString('ko-KR')),
+    image: item.imageData,
+    moods: item.moods||[],
+    occasions: item.occasions||[],
+    weathers: item.weathers||[],
+    colors: item.colors||[],
+    memo,
+    createdAt: new Date().toLocaleDateString('ko-KR')
+  }));
+  saveOutfits([...newOutfits, ...existing]);
 
   // 초기화
   batchItems=[];
@@ -453,7 +451,7 @@ function saveOutfit() {
   document.getElementById('urlInput').value='';
   document.getElementById('memoInput').value='';
 
-  alert('코디가 저장됐어요! 🎉');
+  alert(count+'개 코디가 저장됐어요! 🎉');
   batchItems=[];
   showPage('closet');
 }
