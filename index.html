@@ -127,12 +127,11 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
     <div class="w-badge" id="wTag">—</div>
   </div>
   <div class="chip-label">일정</div>
-  <div class="chips" id="occasionChips">
-    <div class="chip" data-val="출근">출근</div>
+  <div class="chips" id="occasionChips"></div>
     <div class="chip" data-val="데이트">데이트</div>
     <div class="chip" data-val="외출">외출 / 쇼핑</div>
     <div class="chip" data-val="모임">친구 모임</div>
-    <div class="chip" data-val="집콕">집콕</div>
+    <div class="chip" data-val="놀이공원">놀이공원</div>
   </div>
   <div class="chip-label">원하는 컬러</div>
   <div class="color-chips" id="colorFilterChips"></div>
@@ -166,12 +165,11 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
       <div id="driveGrid" class="drive-grid"></div>
       <div class="divider"></div>
       <div class="field-label">일정 선택 (전체 적용)</div>
-      <div class="chips" id="addOccasionChips">
-        <div class="chip" data-val="출근">출근</div>
+      <div class="chips" id="addOccasionChips"></div>
         <div class="chip" data-val="데이트">데이트</div>
         <div class="chip" data-val="외출">외출 / 쇼핑</div>
         <div class="chip" data-val="모임">친구 모임</div>
-        <div class="chip" data-val="집콕">집콕</div>
+        <div class="chip" data-val="놀이공원">놀이공원</div>
       </div>
       <div class="field-label">메모 (선택)</div>
       <input class="field-input" type="text" id="memoInput" placeholder="예: 여름용, 무신사 저장">
@@ -200,6 +198,16 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
 
   <button class="btn-big" onclick="saveSettings()">저장하기</button>
   <div style="margin-top:12px;font-size:0.72rem;color:var(--muted);text-align:center" id="settingStatus"></div>
+
+  <div class="setting-card" style="margin-top:16px">
+    <h3>일정 태그 편집</h3>
+    <div class="setting-desc">태그를 추가하거나 삭제할 수 있어요. 변경하면 모든 탭에 바로 반영돼요.</div>
+    <div id="tagEditList" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;"></div>
+    <div style="display:flex;gap:8px;">
+      <input class="field-input" type="text" id="newTagInput" placeholder="새 태그 입력" style="flex:1" onkeydown="if(event.key==='Enter')addTag()">
+      <button class="btn-big" style="width:auto;padding:10px 16px;margin:0;" onclick="addTag()">추가</button>
+    </div>
+  </div>
 </div>
 
 <!-- 편집 모달 -->
@@ -212,12 +220,11 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
     <div class="chip-label">색상</div>
     <div class="color-chips" id="editColorChips"></div>
     <div class="chip-label">일정</div>
-    <div class="chips" id="editOccasionChips">
-      <div class="chip" data-val="출근">출근</div>
+    <div class="chips" id="editOccasionChips"></div>
       <div class="chip" data-val="데이트">데이트</div>
       <div class="chip" data-val="외출">외출 / 쇼핑</div>
       <div class="chip" data-val="모임">친구 모임</div>
-      <div class="chip" data-val="집콕">집콕</div>
+      <div class="chip" data-val="놀이공원">놀이공원</div>
     </div>
     <div class="chip-label">메모</div>
     <input class="field-input" type="text" id="editMemoInput" placeholder="메모 입력">
@@ -243,6 +250,60 @@ renderColorChips('colorFilterChips');
 // ── 설정 ──────────────────────────────────────────────
 const FOLDER_ID = '176HrbZw2F9yYPk28kpgtYQ7jjZnP6i36';
 
+// ── 태그 관리 ──────────────────────────────────────────
+const DEFAULT_TAGS=['출근','데이트','외출','모임','놀이공원'];
+
+function getTags(){
+  try{return JSON.parse(localStorage.getItem('occasionTags')||'null')||DEFAULT_TAGS;}
+  catch{return DEFAULT_TAGS;}
+}
+function saveTags(tags){
+  localStorage.setItem('occasionTags',JSON.stringify(tags));
+  renderAllTagChips();
+}
+
+function renderAllTagChips(){
+  const tags=getTags();
+  const chipHtml=tags.map(t=>`<div class="chip" data-val="${t}">${t}</div>`).join('');
+  ['occasionChips','addOccasionChips','editOccasionChips'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el) return;
+    const selected=[...el.querySelectorAll('.chip.on')].map(c=>c.dataset.val);
+    el.innerHTML=chipHtml;
+    el.querySelectorAll('.chip').forEach(c=>{
+      if(selected.includes(c.dataset.val)) c.classList.add('on');
+      c.addEventListener('click',()=>c.classList.toggle('on'));
+    });
+  });
+}
+
+function renderTagEditList(){
+  const tags=getTags();
+  document.getElementById('tagEditList').innerHTML=tags.map(t=>`
+    <div style="display:inline-flex;align-items:center;gap:4px;background:var(--tag-bg);border:1px solid var(--border);border-radius:20px;padding:5px 10px 5px 14px;font-size:0.78rem;">
+      ${t}
+      <button onclick="removeTag('${t}')" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:0.9rem;padding:0 2px;">✕</button>
+    </div>`).join('');
+}
+
+function addTag(){
+  const input=document.getElementById('newTagInput');
+  const val=input.value.trim();
+  if(!val) return;
+  const tags=getTags();
+  if(tags.includes(val)){alert('이미 있는 태그예요!');return;}
+  tags.push(val);
+  saveTags(tags);
+  renderTagEditList();
+  input.value='';
+}
+
+function removeTag(tag){
+  const tags=getTags().filter(t=>t!==tag);
+  saveTags(tags);
+  renderTagEditList();
+}
+
 function getSettings(){
   return {
     apiKey: localStorage.getItem('driveApiKey')||'',
@@ -264,6 +325,7 @@ function initSettings(){
   const s=getSettings();
   if(s.apiKey) document.getElementById('apiKeyInput').value=s.apiKey;
   document.getElementById('folderIdInput').value=s.folderId;
+  renderTagEditList();
 }
 
 // ── 날씨 ──────────────────────────────────────────────
@@ -317,6 +379,7 @@ function saveOutfits(arr){
   catch(e){throw e;}
 }
 document.getElementById('countBadge').textContent=getOutfits().length;
+renderAllTagChips();
 
 // ── Google Drive 동기화 ──────────────────────────────────
 let newDrivePhotos=[];
