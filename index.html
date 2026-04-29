@@ -97,6 +97,14 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
 .empty p{font-size:0.84rem;line-height:1.6;}
 .count-badge{display:inline-block;background:var(--accent2);color:#0f0e0d;border-radius:20px;padding:1px 8px;font-size:0.65rem;font-weight:500;margin-left:6px;}
 
+/* 모달 */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:flex-end;justify-content:center;}
+.modal{background:var(--surface);border-radius:20px 20px 0 0;padding:24px 20px 40px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;}
+.modal-title{font-family:'DM Serif Display',serif;font-size:1.2rem;font-style:italic;color:var(--accent);margin-bottom:4px;}
+.modal-sub{font-size:0.72rem;color:var(--muted);margin-bottom:16px;}
+.modal-photo{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:12px;margin-bottom:16px;}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:1.4rem;cursor:pointer;}
+
 .spinner-dot{width:7px;height:7px;border-radius:50%;background:var(--accent2);display:inline-block;animation:pulse 1s infinite;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.2;}}
 </style>
@@ -192,6 +200,29 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
 
   <button class="btn-big" onclick="saveSettings()">저장하기</button>
   <div style="margin-top:12px;font-size:0.72rem;color:var(--muted);text-align:center" id="settingStatus"></div>
+</div>
+
+<!-- 편집 모달 -->
+<div class="modal-bg" id="editModal" style="display:none" onclick="closeModal(event)">
+  <div class="modal" id="editModalInner">
+    <button class="modal-close" onclick="document.getElementById('editModal').style.display='none'">✕</button>
+    <div class="modal-title" id="editModalName"></div>
+    <div class="modal-sub">색상을 수정하고 저장하세요</div>
+    <img class="modal-photo" id="editModalPhoto" src="" alt="">
+    <div class="chip-label">색상</div>
+    <div class="color-chips" id="editColorChips"></div>
+    <div class="chip-label">일정</div>
+    <div class="chips" id="editOccasionChips">
+      <div class="chip" data-val="출근">출근</div>
+      <div class="chip" data-val="데이트">데이트</div>
+      <div class="chip" data-val="외출">외출 / 쇼핑</div>
+      <div class="chip" data-val="모임">친구 모임</div>
+      <div class="chip" data-val="집콕">집콕</div>
+    </div>
+    <div class="chip-label">메모</div>
+    <input class="field-input" type="text" id="editMemoInput" placeholder="메모 입력">
+    <button class="btn-big" onclick="saveEdit()" style="margin-top:16px">저장하기</button>
+  </div>
 </div>
 
 <script>
@@ -493,7 +524,7 @@ function renderCloset(){
   if(!list.length){grid.innerHTML='';empty.style.display='block';return;}
   empty.style.display='none';
   grid.innerHTML=list.map(o=>`
-    <div class="closet-item">
+    <div class="closet-item" onclick="openEdit('${o.id}')">
       ${o.image?`<img class="closet-img" src="${o.image}" alt="${o.name}" onerror="this.style.display='none'">`:`<div class="closet-img-placeholder">👗</div>`}
       <div class="closet-info">
         <div class="closet-name">${o.name}</div>
@@ -503,7 +534,49 @@ function renderCloset(){
       <button class="closet-del" onclick="deleteOutfit('${o.id}')">✕</button>
     </div>`).join('');
 }
-function deleteOutfit(id){if(!confirm('삭제할까요?'))return;saveOutfits(getOutfits().filter(o=>String(o.id)!==String(id)));renderCloset();}
+function deleteOutfit(id){
+  event.stopPropagation();
+  if(!confirm('삭제할까요?'))return;
+  saveOutfits(getOutfits().filter(o=>String(o.id)!==String(id)));
+  renderCloset();
+}
+
+// ── 편집 모달 ──────────────────────────────────────────
+let editingId=null;
+
+function openEdit(id){
+  const o=getOutfits().find(x=>String(x.id)===String(id));
+  if(!o) return;
+  editingId=id;
+  document.getElementById('editModalName').textContent=o.name;
+  document.getElementById('editModalPhoto').src=o.image||'';
+  document.getElementById('editMemoInput').value=o.memo||'';
+  // 색상 칩
+  renderColorChips('editColorChips', o.colors||[]);
+  // 일정 칩
+  document.querySelectorAll('#editOccasionChips .chip').forEach(c=>{
+    c.classList.toggle('on',(o.occasions||[]).includes(c.dataset.val));
+  });
+  document.getElementById('editModal').style.display='flex';
+}
+
+function closeModal(e){
+  if(e.target===document.getElementById('editModal'))
+    document.getElementById('editModal').style.display='none';
+}
+
+function saveEdit(){
+  const list=getOutfits();
+  const idx=list.findIndex(o=>String(o.id)===String(editingId));
+  if(idx===-1) return;
+  list[idx].colors=getSelectedColors('editColorChips');
+  list[idx].occasions=[...document.querySelectorAll('#editOccasionChips .chip.on')].map(c=>c.dataset.val);
+  list[idx].memo=document.getElementById('editMemoInput').value.trim();
+  list[idx].weathers=guessWeather(list[idx].colors);
+  saveOutfits(list);
+  document.getElementById('editModal').style.display='none';
+  renderCloset();
+}
 
 // ── 추천 ──────────────────────────────────────────────
 function recommend(){
