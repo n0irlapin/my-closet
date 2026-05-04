@@ -9,10 +9,10 @@
 :root{--bg:#0f0e0d;--surface:#1a1917;--surface2:#242220;--border:#2e2c2a;--text:#f0ede8;--muted:#7a7672;--accent:#e8c4a0;--accent2:#c4956a;--tag-bg:#2a2724;--danger:#c47a6a;}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;}
-nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;background:var(--bg);}
+nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1000;background:var(--bg);}
 .nav-tab{flex:1;padding:16px 8px;text-align:center;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;}
 .nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
-.page{display:none;padding:20px 16px 80px;max-width:480px;margin:0 auto;overflow-x:hidden;}
+.page{display:none;padding:20px 16px 80px;max-width:480px;margin:0 auto;overflow-x:hidden;position:relative;isolation:isolate;}
 .page.active{display:block;}
 .sec-title{font-family:'DM Serif Display',serif;font-size:1.6rem;font-style:italic;color:var(--accent);margin-bottom:4px;}
 .sec-sub{font-size:0.75rem;color:var(--muted);letter-spacing:0.08em;margin-bottom:20px;}
@@ -30,7 +30,7 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
 
 .color-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px;padding:4px 2px;}
 .color-chip{width:30px;height:30px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:all .2s;position:relative;flex-shrink:0;}
-.color-chip.on{border-color:var(--accent);transform:scale(1.18);}
+.color-chip.on{border-color:var(--accent) !important;box-shadow:0 0 0 2px var(--accent);}
 .color-chip.on::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:white;text-shadow:0 0 3px rgba(0,0,0,0.9);}
 
 .free-input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:0.85rem;color:var(--text);outline:none;resize:none;margin-top:16px;transition:border-color .2s;}
@@ -134,7 +134,7 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
     <div class="chip" data-val="놀이공원">놀이공원</div>
   </div>
   <div class="chip-label">원하는 컬러</div>
-  <div style="overflow:hidden;padding:4px 2px;">
+  <div style="overflow:hidden;padding:4px 2px;position:relative;z-index:1;">
     <div class="color-chips" id="colorFilterChips"></div>
   </div>
   <textarea class="free-input" id="freeInput" rows="2" placeholder="추가 조건 (예: 청바지 입고 싶어, 블랙 계열로)"></textarea>
