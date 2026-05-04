@@ -12,27 +12,23 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1000;background:var(--bg);}
 .nav-tab{flex:1;padding:16px 8px;text-align:center;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;}
 .nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
-.page{display:none;padding:20px 16px 80px;max-width:480px;margin:0 auto;overflow-x:hidden;position:relative;isolation:isolate;}
+.page{display:none;padding:20px 16px 80px;max-width:480px;margin:0 auto;}
 .page.active{display:block;}
 .sec-title{font-family:'DM Serif Display',serif;font-size:1.6rem;font-style:italic;color:var(--accent);margin-bottom:4px;}
 .sec-sub{font-size:0.75rem;color:var(--muted);letter-spacing:0.08em;margin-bottom:20px;}
-
 .weather-strip{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;display:flex;align-items:center;gap:14px;margin-bottom:20px;}
 .w-icon{font-size:2rem;}.w-info{flex:1;}
 .w-temp{font-size:1.4rem;font-weight:300;}.w-desc{font-size:0.72rem;color:var(--muted);margin-top:2px;}
 .w-badge{background:var(--tag-bg);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:0.72rem;color:var(--accent);white-space:nowrap;}
-
 .chip-label{font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;margin-top:16px;}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px;align-items:center;}
 .chip{padding:7px 14px;border-radius:20px;border:1px solid var(--border);font-size:0.78rem;color:var(--muted);cursor:pointer;transition:all .2s;background:var(--tag-bg);font-family:'DM Sans',sans-serif;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;}
 .chip:hover{border-color:var(--accent2);color:var(--accent2);}
 .chip.on{background:var(--accent2);border-color:var(--accent2);color:#0f0e0d;font-weight:500;}
-
-.color-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px;padding:4px 2px;}
-.color-chip{width:30px;height:30px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:all .2s;position:relative;flex-shrink:0;}
-.color-chip.on{border-color:var(--accent) !important;box-shadow:0 0 0 2px var(--accent);}
+.color-chips{display:flex;flex-wrap:wrap;gap:8px;padding:4px 2px;}
+.color-chip{width:30px;height:30px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:border-color .2s;position:relative;flex-shrink:0;}
+.color-chip.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent);}
 .color-chip.on::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:white;text-shadow:0 0 3px rgba(0,0,0,0.9);}
-
 .free-input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:0.85rem;color:var(--text);outline:none;resize:none;margin-top:16px;transition:border-color .2s;}
 .free-input:focus{border-color:var(--accent2);}
 .free-input::placeholder{color:var(--muted);}
@@ -40,7 +36,6 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
 .btn-big:hover{background:var(--accent2);}
 .btn-big:disabled{opacity:.4;cursor:not-allowed;}
 .btn-sm{padding:10px 16px;margin:0;font-size:0.75rem;width:auto;margin-top:0;}
-
 .result-area{margin-top:24px;}
 .r-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:16px;animation:up .4s ease forwards;opacity:0;}
 @keyframes up{to{opacity:1;transform:none;}from{opacity:0;transform:translateY(12px);}}
@@ -55,9 +50,8 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
 .r-tags{display:flex;flex-wrap:wrap;gap:5px;}
 .r-tag{padding:3px 10px;border-radius:10px;background:var(--tag-bg);font-size:0.68rem;color:var(--muted);border:1px solid var(--border);}
 .r-tip{font-size:0.78rem;color:var(--accent2);line-height:1.6;padding-top:10px;margin-top:10px;border-top:1px solid var(--border);}
-
 .closet-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
-.closet-item{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;position:relative;}
+.closet-item{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;position:relative;cursor:pointer;}
 .closet-img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;}
 .closet-img-placeholder{width:100%;aspect-ratio:3/4;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--muted);}
 .closet-info{padding:10px 12px;}
@@ -66,47 +60,35 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
 .closet-color-dot{width:11px;height:11px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);}
 .closet-tags-row{display:flex;flex-wrap:wrap;gap:3px;margin-top:5px;}
 .closet-tag{padding:2px 7px;border-radius:6px;background:var(--tag-bg);font-size:0.6rem;color:var(--muted);border:1px solid var(--border);}
-.closet-del{position:absolute;top:8px;right:8px;background:rgba(15,14,13,0.85);border:none;border-radius:50%;width:26px;height:26px;color:var(--danger);font-size:0.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-
+.closet-del{position:absolute;top:8px;right:8px;background:rgba(15,14,13,0.85);border:none;border-radius:50%;width:26px;height:26px;color:var(--danger);font-size:0.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:1;}
 .add-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:16px;}
 .field-label{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;margin-top:14px;}
 .field-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:0.84rem;color:var(--text);outline:none;transition:border-color .2s;}
 .field-input:focus{border-color:var(--accent2);}
 .divider{border:none;border-top:1px solid var(--border);margin:14px 0;}
-
-/* Drive 그리드 */
 .drive-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;}
-.drive-item{aspect-ratio:3/4;border-radius:10px;overflow:hidden;position:relative;cursor:pointer;border:2px solid transparent;transition:all .2s;}
-.drive-item:hover{border-color:var(--accent2);}
+.drive-item{aspect-ratio:3/4;border-radius:10px;overflow:hidden;position:relative;border:2px solid transparent;transition:all .2s;}
 .drive-item.selected{border-color:var(--accent);}
 .drive-item img{width:100%;height:100%;object-fit:cover;display:block;}
 .drive-item .check{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;background:var(--accent);display:none;align-items:center;justify-content:center;font-size:0.65rem;color:#0f0e0d;font-weight:700;}
 .drive-item.selected .check{display:flex;}
 .drive-loading{text-align:center;padding:24px;color:var(--muted);font-size:0.82rem;}
-
-/* 설정 */
 .setting-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:12px;}
 .setting-card h3{font-size:0.8rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;}
 .setting-desc{font-size:0.75rem;color:var(--muted);line-height:1.6;margin-bottom:12px;}
-.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;}
-.status-dot.ok{background:#6ab87a;}
-.status-dot.err{background:var(--danger);}
-
 .empty{text-align:center;padding:48px 20px;color:var(--muted);}
 .empty-icon{font-size:3rem;margin-bottom:12px;}
 .empty p{font-size:0.84rem;line-height:1.6;}
 .count-badge{display:inline-block;background:var(--accent2);color:#0f0e0d;border-radius:20px;padding:1px 8px;font-size:0.65rem;font-weight:500;margin-left:6px;}
-
+.spinner-dot{width:7px;height:7px;border-radius:50%;background:var(--accent2);display:inline-block;animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.2;}}
 /* 모달 */
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:flex-end;justify-content:center;}
-.modal{background:var(--surface);border-radius:20px 20px 0 0;padding:24px 20px 40px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;}
+.modal{background:var(--surface);border-radius:20px 20px 0 0;padding:24px 20px 40px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;position:relative;}
 .modal-title{font-family:'DM Serif Display',serif;font-size:1.2rem;font-style:italic;color:var(--accent);margin-bottom:4px;}
 .modal-sub{font-size:0.72rem;color:var(--muted);margin-bottom:16px;}
 .modal-photo{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:12px;margin-bottom:16px;}
 .modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:1.4rem;cursor:pointer;}
-
-.spinner-dot{width:7px;height:7px;border-radius:50%;background:var(--accent2);display:inline-block;animation:pulse 1s infinite;}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.2;}}
 </style>
 </head>
 <body>
@@ -121,25 +103,20 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
 <div class="page active" id="page-recommend">
   <div class="sec-title">오늘 뭐 입지?</div>
   <div class="sec-sub">날씨 + 일정 선택하면 내 옷장에서 골라줘요</div>
-  <div class="weather-strip">
-    <div class="w-icon" id="wIcon">🌤️</div>
-    <div class="w-info"><div class="w-temp" id="wTemp">날씨 확인 중...</div><div class="w-desc" id="wDesc"></div></div>
-    <div class="w-badge" id="wTag">—</div>
-  </div>
-  <div class="chip-label">일정</div>
-  <div class="chips" id="occasionChips"></div>
-    <div class="chip" data-val="데이트">데이트</div>
-    <div class="chip" data-val="외출">외출 / 쇼핑</div>
-    <div class="chip" data-val="모임">친구 모임</div>
-    <div class="chip" data-val="놀이공원">놀이공원</div>
-  </div>
-  <div class="chip-label">원하는 컬러</div>
-  <div style="overflow:hidden;padding:4px 2px;position:relative;z-index:1;">
+  <div id="recommendContent">
+    <div class="weather-strip">
+      <div class="w-icon" id="wIcon">🌤️</div>
+      <div class="w-info"><div class="w-temp" id="wTemp">날씨 확인 중...</div><div class="w-desc" id="wDesc"></div></div>
+      <div class="w-badge" id="wTag">—</div>
+    </div>
+    <div class="chip-label">일정</div>
+    <div class="chips" id="occasionChips"></div>
+    <div class="chip-label" style="margin-top:16px">원하는 컬러</div>
     <div class="color-chips" id="colorFilterChips"></div>
+    <textarea class="free-input" id="freeInput" rows="2" placeholder="추가 조건 (예: 청바지 입고 싶어, 블랙 계열로)"></textarea>
+    <button class="btn-big" onclick="recommend()">내 옷장에서 골라줘</button>
+    <div class="result-area" id="resultArea"></div>
   </div>
-  <textarea class="free-input" id="freeInput" rows="2" placeholder="추가 조건 (예: 청바지 입고 싶어, 블랙 계열로)"></textarea>
-  <button class="btn-big" onclick="recommend()">내 옷장에서 골라줘</button>
-  <div class="result-area" id="resultArea"></div>
 </div>
 
 <!-- 옷장 -->
@@ -160,7 +137,7 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
   <div class="add-card">
     <button class="btn-big" style="margin-top:0" onclick="syncDrive()">🔄 Drive 동기화</button>
     <div id="driveLoading" class="drive-loading" style="display:none"><span class="spinner-dot"></span> Drive 확인 중...</div>
-    <div id="driveEmpty" class="drive-loading" style="display:none">새로 추가된 사진이 없어요!<br>Drive MY CLOSET 폴더에 사진을 올린 후 동기화해주세요.</div>
+    <div id="driveEmpty" class="drive-loading" style="display:none">새로 추가된 사진이 없어요!</div>
     <div id="syncResult" style="display:none">
       <div class="divider"></div>
       <div id="newPhotosInfo" style="font-size:0.82rem;color:var(--accent2);margin-bottom:12px;"></div>
@@ -168,11 +145,6 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
       <div class="divider"></div>
       <div class="field-label">일정 선택 (전체 적용)</div>
       <div class="chips" id="addOccasionChips"></div>
-        <div class="chip" data-val="데이트">데이트</div>
-        <div class="chip" data-val="외출">외출 / 쇼핑</div>
-        <div class="chip" data-val="모임">친구 모임</div>
-        <div class="chip" data-val="놀이공원">놀이공원</div>
-      </div>
       <div class="field-label">메모 (선택)</div>
       <input class="field-input" type="text" id="memoInput" placeholder="예: 여름용, 무신사 저장">
       <button class="btn-big" onclick="saveAll()">전체 저장하기</button>
@@ -184,58 +156,48 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
 <div class="page" id="page-setting">
   <div class="sec-title">설정</div>
   <div class="sec-sub">Google Drive 연동</div>
-
   <div class="setting-card">
     <h3>Google Drive API 키</h3>
-    <div class="setting-desc">Google Cloud Console에서 발급한 API 키를 입력해주세요. 이 기기에만 저장돼요.</div>
+    <div class="setting-desc">Google Cloud Console에서 발급한 API 키를 입력해주세요.</div>
     <input class="field-input" type="password" id="apiKeyInput" placeholder="AIza...">
-    <div style="margin-top:8px;font-size:0.72rem;color:var(--muted)" id="apiStatus"></div>
   </div>
-
   <div class="setting-card">
     <h3>Drive 폴더 ID</h3>
-    <div class="setting-desc">Drive 폴더 주소의 folders/ 뒤 문자열이에요. 폴더는 반드시 공개 설정이어야 해요.</div>
+    <div class="setting-desc">폴더 주소의 folders/ 뒤 문자열이에요. 폴더는 공개 설정이어야 해요.</div>
     <input class="field-input" type="text" id="folderIdInput" placeholder="1AbCdEfG...">
   </div>
-
   <button class="btn-big" onclick="saveSettings()">저장하기</button>
   <div style="margin-top:12px;font-size:0.72rem;color:var(--muted);text-align:center" id="settingStatus"></div>
 
   <div class="setting-card" style="margin-top:16px">
     <h3>일정 태그 편집</h3>
-    <div class="setting-desc">태그를 추가하거나 삭제할 수 있어요. 변경하면 모든 탭에 바로 반영돼요.</div>
+    <div class="setting-desc">태그를 추가하거나 삭제할 수 있어요.</div>
     <div id="tagEditList" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;"></div>
     <div style="display:flex;gap:8px;">
       <input class="field-input" type="text" id="newTagInput" placeholder="새 태그 입력" style="flex:1" onkeydown="if(event.key==='Enter')addTag()">
-      <button class="btn-big" style="width:auto;padding:10px 16px;margin:0;" onclick="addTag()">추가</button>
+      <button class="btn-big btn-sm" onclick="addTag()">추가</button>
     </div>
   </div>
 </div>
 
 <!-- 편집 모달 -->
 <div class="modal-bg" id="editModal" style="display:none" onclick="closeModal(event)">
-  <div class="modal" id="editModalInner">
+  <div class="modal">
     <button class="modal-close" onclick="document.getElementById('editModal').style.display='none'">✕</button>
     <div class="modal-title" id="editModalName"></div>
-    <div class="modal-sub">색상을 수정하고 저장하세요</div>
+    <div class="modal-sub">색상과 태그를 수정하세요</div>
     <img class="modal-photo" id="editModalPhoto" src="" alt="">
     <div class="chip-label">색상</div>
     <div class="color-chips" id="editColorChips"></div>
     <div class="chip-label">일정</div>
     <div class="chips" id="editOccasionChips"></div>
-      <div class="chip" data-val="데이트">데이트</div>
-      <div class="chip" data-val="외출">외출 / 쇼핑</div>
-      <div class="chip" data-val="모임">친구 모임</div>
-      <div class="chip" data-val="놀이공원">놀이공원</div>
-    </div>
     <div class="chip-label">메모</div>
     <input class="field-input" type="text" id="editMemoInput" placeholder="메모 입력">
-    <button class="btn-big" onclick="saveEdit()" style="margin-top:16px">저장하기</button>
+    <button class="btn-big" onclick="saveEdit()">저장하기</button>
   </div>
 </div>
 
 <script>
-// ── 컬러 팔레트 ──────────────────────────────────────
 const COLORS=[
   {name:'블랙',hex:'#1a1a1a'},{name:'화이트',hex:'#f0f0eb'},{name:'그레이',hex:'#8a8a8a'},
   {name:'베이지',hex:'#d4c4a8'},{name:'카멜',hex:'#c4956a'},{name:'브라운',hex:'#6b4c3b'},
@@ -243,87 +205,61 @@ const COLORS=[
   {name:'그린',hex:'#6b8a6b'},{name:'카키',hex:'#8a8a5a'},{name:'레드',hex:'#c44a4a'},
   {name:'핑크',hex:'#e8a0b8'},{name:'라벤더',hex:'#b8a0d8'},{name:'옐로우',hex:'#e8d04a'},{name:'오렌지',hex:'#e8904a'},
 ];
-function renderColorChips(id,selected=[]){
-  document.getElementById(id).innerHTML=COLORS.map(c=>`<div class="color-chip ${selected.includes(c.name)?'on':''}" style="background:${c.hex}" data-name="${c.name}" title="${c.name}" onclick="this.classList.toggle('on')"></div>`).join('');
-}
-function getSelectedColors(id){return[...document.querySelectorAll(`#${id} .color-chip.on`)].map(c=>c.dataset.name);}
-// ── 설정 ──────────────────────────────────────────────
-const FOLDER_ID = '176HrbZw2F9yYPk28kpgtYQ7jjZnP6i36';
-
-// ── 태그 관리 ──────────────────────────────────────────
+const FOLDER_ID='176HrbZw2F9yYPk28kpgtYQ7jjZnP6i36';
 const DEFAULT_TAGS=['출근','데이트','외출','모임','놀이공원'];
 
-function getTags(){
-  try{return JSON.parse(localStorage.getItem('occasionTags')||'null')||DEFAULT_TAGS;}
-  catch{return DEFAULT_TAGS;}
+// ── 컬러칩 ──────────────────────────────────────────
+function renderColorChips(id,selected=[]){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.innerHTML=COLORS.map(c=>`<div class="color-chip ${selected.includes(c.name)?'on':''}" style="background:${c.hex}" data-name="${c.name}" title="${c.name}" onclick="this.classList.toggle('on')"></div>`).join('');
 }
-function saveTags(tags){
-  localStorage.setItem('occasionTags',JSON.stringify(tags));
-  renderAllTagChips();
+function getSelectedColors(id){
+  return[...document.querySelectorAll(`#${id} .color-chip.on`)].map(c=>c.dataset.name);
 }
 
+// ── 태그 관리 ──────────────────────────────────────────
+function getTags(){try{return JSON.parse(localStorage.getItem('occasionTags')||'null')||DEFAULT_TAGS;}catch{return DEFAULT_TAGS;}}
+function saveTags(tags){localStorage.setItem('occasionTags',JSON.stringify(tags));renderAllTagChips();}
 function renderAllTagChips(){
   const tags=getTags();
-  const chipHtml=tags.map(t=>`<div class="chip" data-val="${t}">${t}</div>`).join('');
   ['occasionChips','addOccasionChips','editOccasionChips'].forEach(id=>{
     const el=document.getElementById(id);
-    if(!el) return;
+    if(!el)return;
     const selected=[...el.querySelectorAll('.chip.on')].map(c=>c.dataset.val);
-    el.innerHTML=chipHtml;
-    el.querySelectorAll('.chip').forEach(c=>{
-      if(selected.includes(c.dataset.val)) c.classList.add('on');
-      c.addEventListener('click',()=>c.classList.toggle('on'));
-    });
+    el.innerHTML=tags.map(t=>`<div class="chip ${selected.includes(t)?'on':''}" data-val="${t}">${t}</div>`).join('');
+    el.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>c.classList.toggle('on')));
   });
 }
-
 function renderTagEditList(){
-  const tags=getTags();
-  document.getElementById('tagEditList').innerHTML=tags.map(t=>`
+  document.getElementById('tagEditList').innerHTML=getTags().map(t=>`
     <div style="display:inline-flex;align-items:center;gap:4px;background:var(--tag-bg);border:1px solid var(--border);border-radius:20px;padding:5px 10px 5px 14px;font-size:0.78rem;">
-      ${t}
-      <button onclick="removeTag('${t}')" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:0.9rem;padding:0 2px;">✕</button>
+      ${t}<button onclick="removeTag('${t}')" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:0.9rem;padding:0 2px;">✕</button>
     </div>`).join('');
 }
-
 function addTag(){
   const input=document.getElementById('newTagInput');
-  const val=input.value.trim();
-  if(!val) return;
+  const val=input.value.trim(); if(!val)return;
   const tags=getTags();
   if(tags.includes(val)){alert('이미 있는 태그예요!');return;}
-  tags.push(val);
-  saveTags(tags);
-  renderTagEditList();
-  input.value='';
+  tags.push(val); saveTags(tags); renderTagEditList(); input.value='';
 }
+function removeTag(tag){saveTags(getTags().filter(t=>t!==tag));renderTagEditList();}
 
-function removeTag(tag){
-  const tags=getTags().filter(t=>t!==tag);
-  saveTags(tags);
-  renderTagEditList();
-}
-
-function getSettings(){
-  return {
-    apiKey: localStorage.getItem('driveApiKey')||'',
-    folderId: localStorage.getItem('driveFolderId')||FOLDER_ID
-  };
-}
+// ── 설정 ──────────────────────────────────────────────
+function getSettings(){return{apiKey:localStorage.getItem('driveApiKey')||'',folderId:localStorage.getItem('driveFolderId')||FOLDER_ID};}
 function saveSettings(){
   const key=document.getElementById('apiKeyInput').value.trim();
   const fid=document.getElementById('folderIdInput').value.trim();
   if(!key){alert('API 키를 입력해주세요!');return;}
-  localStorage.setItem('driveApiKey', key);
-  localStorage.setItem('driveFolderId', fid||FOLDER_ID);
+  localStorage.setItem('driveApiKey',key);
+  localStorage.setItem('driveFolderId',fid||FOLDER_ID);
   document.getElementById('settingStatus').textContent='✓ 저장됐어요!';
   setTimeout(()=>document.getElementById('settingStatus').textContent='',2000);
 }
-
-// 설정 페이지 진입시 기존값 채우기
 function initSettings(){
   const s=getSettings();
-  if(s.apiKey) document.getElementById('apiKeyInput').value=s.apiKey;
+  if(s.apiKey)document.getElementById('apiKeyInput').value=s.apiKey;
   document.getElementById('folderIdInput').value=s.folderId;
   renderTagEditList();
 }
@@ -367,101 +303,16 @@ function showPage(id){
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   document.querySelectorAll('.nav-tab')[{recommend:0,closet:1,add:2,setting:3}[id]].classList.add('active');
-  if(id==='closet') renderCloset();
-  if(id==='setting') initSettings();
-  // 추천탭 진입시에만 컬러칩 렌더링
-  if(id==='recommend'){
-    const selected=getSelectedColors('colorFilterChips');
-    renderColorChips('colorFilterChips', selected);
-  }
+  if(id==='closet')renderCloset();
+  if(id==='setting')initSettings();
+  if(id==='recommend')renderColorChips('colorFilterChips',getSelectedColors('colorFilterChips'));
 }
-document.querySelectorAll('.chips').forEach(g=>g.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>c.classList.toggle('on'))));
 
 // ── localStorage ──────────────────────────────────────
 function getOutfits(){try{return JSON.parse(localStorage.getItem('myOutfits')||'[]');}catch{return[];}}
 function saveOutfits(arr){
   try{localStorage.setItem('myOutfits',JSON.stringify(arr));document.getElementById('countBadge').textContent=arr.length;}
   catch(e){throw e;}
-}
-document.getElementById('countBadge').textContent=getOutfits().length;
-renderAllTagChips();
-// 초기 로드 - recommend 탭이 기본 active이므로 렌더링
-renderColorChips('colorFilterChips');
-
-
-// ── Google Drive 동기화 ──────────────────────────────────
-let newDrivePhotos=[];
-
-async function syncDrive(){
-  const s=getSettings();
-  if(!s.apiKey){
-    alert('설정 탭에서 API 키를 먼저 입력해주세요!');
-    showPage('setting');
-    return;
-  }
-  document.getElementById('driveLoading').style.display='block';
-  document.getElementById('driveEmpty').style.display='none';
-  document.getElementById('syncResult').style.display='none';
-
-  try{
-    // 전체 파일 페이지네이션으로 가져오기
-    let driveFiles=[];
-    let pageToken='';
-    do {
-      const url=`https://www.googleapis.com/drive/v3/files?q='${s.folderId}'+in+parents+and+mimeType+contains+'image/'&fields=nextPageToken,files(id,name,mimeType)&key=${s.apiKey}&pageSize=1000${pageToken?'&pageToken='+pageToken:''}`;
-      const r=await fetch(url);
-      const d=await r.json();
-      if(d.error) throw new Error(d.error.message);
-      driveFiles=[...driveFiles,...(d.files||[])];
-      pageToken=d.nextPageToken||'';
-    } while(pageToken);
-    const driveIds=new Set(driveFiles.map(f=>f.id));
-    const existing=getOutfits();
-
-    // Drive에 없는 항목 제거 (삭제된 사진 반영)
-    const kept=existing.filter(o=>!o.driveId||driveIds.has(o.driveId));
-    const removed=existing.length-kept.length;
-
-    // 새로 추가된 것만
-    const keptIds=new Set(kept.map(o=>o.driveId).filter(Boolean));
-    newDrivePhotos=driveFiles.filter(f=>!keptIds.has(f.id));
-
-    // 삭제된 것 먼저 반영
-    if(removed>0) saveOutfits(kept);
-
-    document.getElementById('driveLoading').style.display='none';
-
-    if(!newDrivePhotos.length && removed===0){
-      document.getElementById('driveEmpty').style.display='block';
-      document.getElementById('driveEmpty').textContent='Drive와 이미 동기화되어 있어요!';
-      return;
-    }
-
-    // 안내 메시지
-    let info='';
-    if(removed>0) info+=`🗑 삭제된 사진 ${removed}장 반영됨. `;
-    if(newDrivePhotos.length>0) info+=`✨ 새 사진 ${newDrivePhotos.length}장 발견!`;
-    document.getElementById('newPhotosInfo').textContent=info;
-
-    if(newDrivePhotos.length>0){
-      document.getElementById('driveGrid').innerHTML=newDrivePhotos.map(f=>`
-        <div class="drive-item selected" style="cursor:default">
-          <img src="https://drive.google.com/thumbnail?id=${f.id}&sz=w400" alt="${f.name}" onerror="this.style.opacity=0.3">
-          <div class="check">✓</div>
-        </div>`).join('');
-    } else {
-      document.getElementById('driveGrid').innerHTML='';
-    }
-    document.getElementById('syncResult').style.display='block';
-
-    // 새 사진 없고 삭제만 있으면 저장 버튼 숨기기
-    const saveBtn=document.querySelector('#syncResult .btn-big');
-    if(saveBtn) saveBtn.style.display=newDrivePhotos.length>0?'block':'none';
-
-  }catch(e){
-    document.getElementById('driveLoading').style.display='none';
-    alert('Drive 연결 실패: '+e.message+'\nAPI 키와 폴더 공개 설정을 확인해주세요.');
-  }
 }
 
 // ── 색상 추출 ──────────────────────────────────────────
@@ -475,12 +326,9 @@ function extractColors(imgEl,topN=4){
       const data=ctx.getImageData(0,0,60,60).data;
       const buckets={};
       for(let i=0;i<data.length;i+=16){
-        const r=Math.round(data[i]/32)*32;
-        const g=Math.round(data[i+1]/32)*32;
-        const b=Math.round(data[i+2]/32)*32;
+        const r=Math.round(data[i]/32)*32,g=Math.round(data[i+1]/32)*32,b=Math.round(data[i+2]/32)*32;
         if(data[i+3]<128)continue;
-        const k=`${r},${g},${b}`;
-        buckets[k]=(buckets[k]||0)+1;
+        const k=`${r},${g},${b}`;buckets[k]=(buckets[k]||0)+1;
       }
       const sorted=Object.entries(buckets).sort((a,b)=>b[1]-a[1]).slice(0,20);
       const matched=new Set();
@@ -494,23 +342,18 @@ function extractColors(imgEl,topN=4){
     }catch{res([]);}
   });
 }
-
 function matchColor(r,g,b){
   const targets=[
-    {name:'블랙',r:20,g:20,b:20},{name:'화이트',r:240,g:238,b:232},
-    {name:'그레이',r:138,g:138,b:138},{name:'베이지',r:212,g:196,b:168},
-    {name:'카멜',r:196,g:149,b:106},{name:'브라운',r:107,g:76,b:59},
-    {name:'네이비',r:44,g:62,b:107},{name:'블루',r:90,g:138,b:184},
-    {name:'데님',r:107,g:143,b:168},{name:'그린',r:107,g:138,b:107},
-    {name:'카키',r:138,g:138,b:90},{name:'레드',r:196,g:74,b:74},
-    {name:'핑크',r:232,g:160,b:184},{name:'라벤더',r:184,g:160,b:216},
-    {name:'옐로우',r:232,g:208,b:74},{name:'오렌지',r:232,g:144,b:74},
+    {name:'블랙',r:20,g:20,b:20},{name:'화이트',r:240,g:238,b:232},{name:'그레이',r:138,g:138,b:138},
+    {name:'베이지',r:212,g:196,b:168},{name:'카멜',r:196,g:149,b:106},{name:'브라운',r:107,g:76,b:59},
+    {name:'네이비',r:44,g:62,b:107},{name:'블루',r:90,g:138,b:184},{name:'데님',r:107,g:143,b:168},
+    {name:'그린',r:107,g:138,b:107},{name:'카키',r:138,g:138,b:90},{name:'레드',r:196,g:74,b:74},
+    {name:'핑크',r:232,g:160,b:184},{name:'라벤더',r:184,g:160,b:216},{name:'옐로우',r:232,g:208,b:74},{name:'오렌지',r:232,g:144,b:74},
   ];
   let best=null,bestDist=Infinity;
   for(const t of targets){const d=Math.sqrt((r-t.r)**2+(g-t.g)**2+(b-t.b)**2);if(d<bestDist){bestDist=d;best=t.name;}}
   return bestDist<80?best:null;
 }
-
 function guessWeather(colors){
   const dark=['블랙','브라운','네이비','카키'];
   const light=['화이트','베이지','핑크','라벤더','옐로우'];
@@ -519,60 +362,88 @@ function guessWeather(colors){
   return['mild','warm'];
 }
 
-// ── Drive 사진 전체 저장 ──────────────────────────────
+// ── Drive 동기화 ──────────────────────────────────────
+let newDrivePhotos=[];
+async function syncDrive(){
+  const s=getSettings();
+  if(!s.apiKey){alert('설정 탭에서 API 키를 먼저 입력해주세요!');showPage('setting');return;}
+  document.getElementById('driveLoading').style.display='block';
+  document.getElementById('driveEmpty').style.display='none';
+  document.getElementById('syncResult').style.display='none';
+  try{
+    let driveFiles=[],pageToken='';
+    do{
+      const url=`https://www.googleapis.com/drive/v3/files?q='${s.folderId}'+in+parents+and+mimeType+contains+'image/'&fields=nextPageToken,files(id,name,mimeType)&key=${s.apiKey}&pageSize=1000${pageToken?'&pageToken='+pageToken:''}`;
+      const r=await fetch(url);
+      const d=await r.json();
+      if(d.error)throw new Error(d.error.message);
+      driveFiles=[...driveFiles,...(d.files||[])];
+      pageToken=d.nextPageToken||'';
+    }while(pageToken);
+
+    const driveIds=new Set(driveFiles.map(f=>f.id));
+    const existing=getOutfits();
+    const kept=existing.filter(o=>!o.driveId||driveIds.has(o.driveId));
+    const removed=existing.length-kept.length;
+    if(removed>0)saveOutfits(kept);
+    const keptIds=new Set(kept.map(o=>o.driveId).filter(Boolean));
+    newDrivePhotos=driveFiles.filter(f=>!keptIds.has(f.id));
+    document.getElementById('driveLoading').style.display='none';
+
+    if(!newDrivePhotos.length&&removed===0){
+      document.getElementById('driveEmpty').style.display='block';
+      document.getElementById('driveEmpty').textContent='Drive와 이미 동기화되어 있어요!';
+      return;
+    }
+    let info='';
+    if(removed>0)info+=`🗑 삭제된 사진 ${removed}장 반영됨. `;
+    if(newDrivePhotos.length>0)info+=`✨ 새 사진 ${newDrivePhotos.length}장 발견!`;
+    document.getElementById('newPhotosInfo').textContent=info;
+    document.getElementById('driveGrid').innerHTML=newDrivePhotos.map(f=>`
+      <div class="drive-item selected">
+        <img src="https://drive.google.com/thumbnail?id=${f.id}&sz=w400" alt="${f.name}" onerror="this.style.opacity=0.3">
+        <div class="check">✓</div>
+      </div>`).join('');
+    const saveBtn=document.querySelector('#syncResult .btn-big');
+    if(saveBtn)saveBtn.style.display=newDrivePhotos.length>0?'block':'none';
+    document.getElementById('syncResult').style.display='block';
+    renderAllTagChips();
+  }catch(e){
+    document.getElementById('driveLoading').style.display='none';
+    alert('Drive 연결 실패: '+e.message);
+  }
+}
+
 async function saveAll(){
   if(!newDrivePhotos.length){alert('저장할 사진이 없어요!');return;}
   const btn=document.querySelector('#syncResult .btn-big');
   if(btn){btn.disabled=true;}
-
   const occasions=[...document.querySelectorAll('#addOccasionChips .chip.on')].map(c=>c.dataset.val);
   const memo=document.getElementById('memoInput').value.trim();
   const existing=getOutfits();
   const total=newDrivePhotos.length;
   let done=0;
-
-  // 진행률 표시
   const info=document.getElementById('newPhotosInfo');
-  function updateProgress(){
-    info.textContent=`색상 추출 중... ${done}/${total}장`;
-  }
+  function updateProgress(){info.textContent=`색상 추출 중... ${done}/${total}장`;}
   updateProgress();
-
-  // 10장씩 병렬 처리
   async function processChunk(chunk){
     return Promise.all(chunk.map(async f=>{
       const imgUrl=`https://drive.google.com/thumbnail?id=${f.id}&sz=w400`;
       let colors=[];
       try{
-        const img=new Image();
-        img.crossOrigin='anonymous';
+        const img=new Image();img.crossOrigin='anonymous';
         await new Promise(res=>{img.onload=res;img.onerror=res;img.src=imgUrl;});
         colors=await extractColors(img);
       }catch{}
-      done++;
-      updateProgress();
-      return{
-        id:Date.now()+Math.random(),
-        driveId:f.id,
-        name:f.name.replace(/\.[^.]+$/, ''),
-        image:imgUrl,
-        colors,
-        weathers:guessWeather(colors),
-        occasions,
-        memo,
-        createdAt:new Date().toLocaleDateString('ko-KR')
-      };
+      done++;updateProgress();
+      return{id:Date.now()+Math.random(),driveId:f.id,name:f.name.replace(/\.[^.]+$/,''),image:imgUrl,colors,weathers:guessWeather(colors),occasions,memo,createdAt:new Date().toLocaleDateString('ko-KR')};
     }));
   }
-
-  const CHUNK=10;
   const newItems=[];
-  for(let i=0;i<newDrivePhotos.length;i+=CHUNK){
-    const chunk=newDrivePhotos.slice(i,i+CHUNK);
-    const results=await processChunk(chunk);
+  for(let i=0;i<newDrivePhotos.length;i+=10){
+    const results=await processChunk(newDrivePhotos.slice(i,i+10));
     newItems.push(...results);
   }
-
   try{
     saveOutfits([...newItems,...existing]);
     alert(newItems.length+'개 저장됐어요! 🎉');
@@ -581,9 +452,7 @@ async function saveAll(){
     document.querySelectorAll('#addOccasionChips .chip').forEach(c=>c.classList.remove('on'));
     document.getElementById('syncResult').style.display='none';
     showPage('closet');
-  }catch{
-    alert('저장 공간이 부족해요.\n옷장에서 일부 코디를 삭제해주세요.');
-  }
+  }catch{alert('저장 공간이 부족해요.');}
   if(btn){btn.disabled=false;btn.textContent='전체 저장하기';}
 }
 
@@ -602,44 +471,32 @@ function renderCloset(){
         <div class="closet-colors">${(o.colors||[]).slice(0,5).map(cn=>{const c=COLORS.find(x=>x.name===cn);return c?`<div class="closet-color-dot" style="background:${c.hex}" title="${cn}"></div>`:''}).join('')}</div>
         <div class="closet-tags-row">${(o.occasions||[]).map(t=>`<span class="closet-tag">${t}</span>`).join('')}</div>
       </div>
-      <button class="closet-del" onclick="deleteOutfit('${o.id}')">✕</button>
+      <button class="closet-del" onclick="event.stopPropagation();deleteOutfit('${o.id}')">✕</button>
     </div>`).join('');
 }
-function deleteOutfit(id){
-  event.stopPropagation();
-  if(!confirm('삭제할까요?'))return;
-  saveOutfits(getOutfits().filter(o=>String(o.id)!==String(id)));
-  renderCloset();
-}
+function deleteOutfit(id){if(!confirm('삭제할까요?'))return;saveOutfits(getOutfits().filter(o=>String(o.id)!==String(id)));renderCloset();}
 
 // ── 편집 모달 ──────────────────────────────────────────
 let editingId=null;
-
 function openEdit(id){
   const o=getOutfits().find(x=>String(x.id)===String(id));
-  if(!o) return;
+  if(!o)return;
   editingId=id;
   document.getElementById('editModalName').textContent=o.name;
   document.getElementById('editModalPhoto').src=o.image||'';
   document.getElementById('editMemoInput').value=o.memo||'';
-  // 색상 칩
-  renderColorChips('editColorChips', o.colors||[]);
-  // 일정 칩
+  renderColorChips('editColorChips',o.colors||[]);
+  renderAllTagChips();
   document.querySelectorAll('#editOccasionChips .chip').forEach(c=>{
     c.classList.toggle('on',(o.occasions||[]).includes(c.dataset.val));
   });
   document.getElementById('editModal').style.display='flex';
 }
-
-function closeModal(e){
-  if(e.target===document.getElementById('editModal'))
-    document.getElementById('editModal').style.display='none';
-}
-
+function closeModal(e){if(e.target===document.getElementById('editModal'))document.getElementById('editModal').style.display='none';}
 function saveEdit(){
   const list=getOutfits();
   const idx=list.findIndex(o=>String(o.id)===String(editingId));
-  if(idx===-1) return;
+  if(idx===-1)return;
   list[idx].colors=getSelectedColors('editColorChips');
   list[idx].occasions=[...document.querySelectorAll('#editOccasionChips .chip.on')].map(c=>c.dataset.val);
   list[idx].memo=document.getElementById('editMemoInput').value.trim();
@@ -660,7 +517,6 @@ function recommend(){
   const selOccasions=[...document.querySelectorAll('#occasionChips .chip.on')].map(c=>c.dataset.val);
   const selColors=getSelectedColors('colorFilterChips');
   const ft=document.getElementById('freeInput').value.trim().toLowerCase();
-
   const scored=list.map(o=>{
     let s=0;
     const order=['cold','cool','mild','warm','hot'];
@@ -675,10 +531,8 @@ function recommend(){
     return{...o,s};
   });
   scored.sort((a,b)=>b.s-a.s);
-  const top=scored.slice(0,2);
-
   ra.innerHTML=`<div style="font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">오늘의 픽</div>`;
-  top.forEach((o,i)=>{
+  scored.slice(0,2).forEach((o,i)=>{
     const card=document.createElement('div');
     card.className='r-card';card.style.animationDelay=`${i*0.12}s`;
     const colorDots=(o.colors||[]).map(cn=>{const c=COLORS.find(x=>x.name===cn);return c?`<div class="r-color-dot" style="background:${c.hex}" title="${cn}"></div>`:''}).join('');
@@ -695,6 +549,11 @@ function recommend(){
     ra.appendChild(card);
   });
 }
+
+// ── 초기화 ──────────────────────────────────────────
+document.getElementById('countBadge').textContent=getOutfits().length;
+renderAllTagChips();
+renderColorChips('colorFilterChips');
 </script>
 </body>
 </html>
