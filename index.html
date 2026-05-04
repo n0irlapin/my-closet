@@ -12,7 +12,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;background:var(--bg);}
 .nav-tab{flex:1;padding:16px 8px;text-align:center;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;}
 .nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
-.page{display:none;padding:20px 16px 80px;max-width:480px;margin:0 auto;}
+.page{display:none;padding:20px 16px 80px;max-width:480px;margin:0 auto;overflow-x:hidden;}
 .page.active{display:block;}
 .sec-title{font-family:'DM Serif Display',serif;font-size:1.6rem;font-style:italic;color:var(--accent);margin-bottom:4px;}
 .sec-sub{font-size:0.75rem;color:var(--muted);letter-spacing:0.08em;margin-bottom:20px;}
@@ -24,11 +24,11 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
 
 .chip-label{font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;margin-top:16px;}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px;}
-.chip{padding:7px 14px;border-radius:20px;border:1px solid var(--border);font-size:0.78rem;color:var(--muted);cursor:pointer;transition:all .2s;background:var(--tag-bg);font-family:'DM Sans',sans-serif;}
+.chip{padding:7px 14px;border-radius:20px;border:1px solid var(--border);font-size:0.78rem;color:var(--muted);cursor:pointer;transition:all .2s;background:var(--tag-bg);font-family:'DM Sans',sans-serif;white-space:nowrap;}
 .chip:hover{border-color:var(--accent2);color:var(--accent2);}
 .chip.on{background:var(--accent2);border-color:var(--accent2);color:#0f0e0d;font-weight:500;}
 
-.color-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px;}
+.color-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px;padding:4px 2px;}
 .color-chip{width:30px;height:30px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:all .2s;position:relative;flex-shrink:0;}
 .color-chip.on{border-color:var(--accent);transform:scale(1.18);}
 .color-chip.on::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:white;text-shadow:0 0 3px rgba(0,0,0,0.9);}
@@ -134,7 +134,9 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
     <div class="chip" data-val="놀이공원">놀이공원</div>
   </div>
   <div class="chip-label">원하는 컬러</div>
-  <div class="color-chips" id="colorFilterChips"></div>
+  <div style="overflow:hidden;padding:4px 2px;">
+    <div class="color-chips" id="colorFilterChips"></div>
+  </div>
   <textarea class="free-input" id="freeInput" rows="2" placeholder="추가 조건 (예: 청바지 입고 싶어, 블랙 계열로)"></textarea>
   <button class="btn-big" onclick="recommend()">내 옷장에서 골라줘</button>
   <div class="result-area" id="resultArea"></div>
@@ -369,6 +371,7 @@ function showPage(id){
   document.querySelectorAll('.nav-tab')[{recommend:0,closet:1,add:2,setting:3}[id]].classList.add('active');
   if(id==='closet') renderCloset();
   if(id==='setting') initSettings();
+  if(id==='recommend') renderColorChips('colorFilterChips', getSelectedColors('colorFilterChips'));
 }
 document.querySelectorAll('.chips').forEach(g=>g.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>c.classList.toggle('on'))));
 
@@ -380,6 +383,8 @@ function saveOutfits(arr){
 }
 document.getElementById('countBadge').textContent=getOutfits().length;
 renderAllTagChips();
+// 추천탭 컬러칩은 탭 진입시 렌더링
+setTimeout(()=>renderColorChips('colorFilterChips'), 0);
 
 // ── Google Drive 동기화 ──────────────────────────────────
 let newDrivePhotos=[];
