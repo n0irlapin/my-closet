@@ -23,8 +23,8 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
 .w-badge{background:var(--tag-bg);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:0.72rem;color:var(--accent);white-space:nowrap;}
 
 .chip-label{font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;margin-top:16px;}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px;}
-.chip{padding:7px 14px;border-radius:20px;border:1px solid var(--border);font-size:0.78rem;color:var(--muted);cursor:pointer;transition:all .2s;background:var(--tag-bg);font-family:'DM Sans',sans-serif;white-space:nowrap;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px;align-items:center;}
+.chip{padding:7px 14px;border-radius:20px;border:1px solid var(--border);font-size:0.78rem;color:var(--muted);cursor:pointer;transition:all .2s;background:var(--tag-bg);font-family:'DM Sans',sans-serif;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;}
 .chip:hover{border-color:var(--accent2);color:var(--accent2);}
 .chip.on{background:var(--accent2);border-color:var(--accent2);color:#0f0e0d;font-weight:500;}
 
@@ -247,8 +247,6 @@ function renderColorChips(id,selected=[]){
   document.getElementById(id).innerHTML=COLORS.map(c=>`<div class="color-chip ${selected.includes(c.name)?'on':''}" style="background:${c.hex}" data-name="${c.name}" title="${c.name}" onclick="this.classList.toggle('on')"></div>`).join('');
 }
 function getSelectedColors(id){return[...document.querySelectorAll(`#${id} .color-chip.on`)].map(c=>c.dataset.name);}
-renderColorChips('colorFilterChips');
-
 // ── 설정 ──────────────────────────────────────────────
 const FOLDER_ID = '176HrbZw2F9yYPk28kpgtYQ7jjZnP6i36';
 
@@ -371,7 +369,11 @@ function showPage(id){
   document.querySelectorAll('.nav-tab')[{recommend:0,closet:1,add:2,setting:3}[id]].classList.add('active');
   if(id==='closet') renderCloset();
   if(id==='setting') initSettings();
-  if(id==='recommend') renderColorChips('colorFilterChips', getSelectedColors('colorFilterChips'));
+  // 추천탭 진입시에만 컬러칩 렌더링
+  if(id==='recommend'){
+    const selected=getSelectedColors('colorFilterChips');
+    renderColorChips('colorFilterChips', selected);
+  }
 }
 document.querySelectorAll('.chips').forEach(g=>g.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>c.classList.toggle('on'))));
 
@@ -383,8 +385,9 @@ function saveOutfits(arr){
 }
 document.getElementById('countBadge').textContent=getOutfits().length;
 renderAllTagChips();
-// 추천탭 컬러칩은 탭 진입시 렌더링
-setTimeout(()=>renderColorChips('colorFilterChips'), 0);
+// 초기 로드 - recommend 탭이 기본 active이므로 렌더링
+renderColorChips('colorFilterChips');
+
 
 // ── Google Drive 동기화 ──────────────────────────────────
 let newDrivePhotos=[];
