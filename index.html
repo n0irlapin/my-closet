@@ -601,9 +601,11 @@ function openTrend(site){
 
   let url='';
   if(site==='musinsa'){
-    url=`https://www.musinsa.com/search/musinsa/integration?type=styling&keyword=${encodeURIComponent(query)}`;
+    // 무신사 스냅(코디 사진) 검색
+    url=`https://www.musinsa.com/snap/lookbook?gf=A&keyword=${encodeURIComponent(query)}`;
   }else if(site==='zigzag'){
-    url=`https://zigzag.kr/search?keyword=${encodeURIComponent(query)}`;
+    // 지그재그는 상품 검색만 지원되어 핀터레스트로 대체 권장이지만 키워드 정리
+    url=`https://zigzag.kr/search?keyword=${encodeURIComponent(parts.join(' '))}`;
   }else if(site==='pinterest'){
     url=`https://www.pinterest.com/search/pins/?q=${encodeURIComponent(query)}`;
   }
