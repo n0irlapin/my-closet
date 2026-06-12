@@ -137,6 +137,9 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
     <div class="chip" data-val="빈티지">빈티지</div>
   </div>
 
+  <div class="chip-label">색상 (선택)</div>
+  <div class="color-chips" id="trendColorChips"></div>
+
   <div class="chip-label">계절 (선택)</div>
   <div class="chips" id="trendSeasonChips">
     <div class="chip" data-val="여름">여름</div>
@@ -592,11 +595,12 @@ document.querySelectorAll('#trendStyleChips .chip, #trendSeasonChips .chip').for
 
 function openTrend(site){
   const styles=[...document.querySelectorAll('#trendStyleChips .chip.on')].map(c=>c.dataset.val);
+  const colors=getSelectedColors('trendColorChips');
   const seasons=[...document.querySelectorAll('#trendSeasonChips .chip.on')].map(c=>c.dataset.val);
   const free=document.getElementById('trendFreeInput').value.trim();
-  const parts=[...styles,...seasons];
+  const parts=[...styles,...colors,...seasons];
   if(free)parts.push(free);
-  if(!parts.length){alert('스타일을 하나 이상 선택해주세요!');return;}
+  if(!parts.length){alert('스타일, 색상, 계절 중 하나 이상 선택해주세요!');return;}
   const query=parts.join(' ')+' 코디';
 
   let url='';
@@ -616,6 +620,7 @@ function openTrend(site){
 document.getElementById('countBadge').textContent=getOutfits().length;
 renderAllTagChips();
 renderColorChips('colorFilterChips');
+renderColorChips('trendColorChips');
 </script>
 </body>
 </html>
