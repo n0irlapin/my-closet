@@ -153,7 +153,7 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
   <div class="divider"></div>
   <div class="field-label">어디서 볼까요?</div>
   <button class="btn-big" onclick="openTrend('musinsa')">🛍 무신사 스냅에서 보기</button>
-  <button class="btn-big" onclick="openTrend('zigzag')">💗 지그재그에서 보기</button>
+  <button class="btn-big" onclick="openTrend('zigzag')">💗 핀터레스트(영문 검색)에서 보기</button>
   <button class="btn-big" onclick="openTrend('pinterest')">📌 핀터레스트에서 보기</button>
 </div>
 
@@ -606,10 +606,11 @@ function openTrend(site){
   let url='';
   if(site==='musinsa'){
     // 무신사 스냅(코디 사진) 검색
-    url=`https://www.musinsa.com/snap/lookbook?gf=A&keyword=${encodeURIComponent(query)}`;
+    url=`https://www.musinsa.com/search/snap?keyword=${encodeURIComponent(query)}`;
   }else if(site==='zigzag'){
-    // 지그재그는 상품 검색만 지원되어 핀터레스트로 대체 권장이지만 키워드 정리
-    url=`https://zigzag.kr/search?keyword=${encodeURIComponent(parts.join(' '))}`;
+    // 지그재그는 코디 스냅 검색 미지원 - 핀터레스트 영문 검색으로 대체
+    const enQuery=parts.join(' ')+' korean fashion outfit';
+    url=`https://www.pinterest.com/search/pins/?q=${encodeURIComponent(enQuery)}`;
   }else if(site==='pinterest'){
     url=`https://www.pinterest.com/search/pins/?q=${encodeURIComponent(query)}`;
   }
