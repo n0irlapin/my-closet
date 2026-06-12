@@ -94,6 +94,7 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
 <body>
 <nav>
   <div class="nav-tab active" onclick="showPage('recommend')">오늘의 OOTD</div>
+  <div class="nav-tab" onclick="showPage('trend')">트렌드</div>
   <div class="nav-tab" onclick="showPage('closet')">내 옷장 <span class="count-badge" id="countBadge">0</span></div>
   <div class="nav-tab" onclick="showPage('add')">+ 추가</div>
   <div class="nav-tab" onclick="showPage('setting')">설정</div>
@@ -117,6 +118,40 @@ nav{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-i
     <button class="btn-big" onclick="recommend()">내 옷장에서 골라줘</button>
     <div class="result-area" id="resultArea"></div>
   </div>
+</div>
+
+<!-- 트렌드 -->
+<div class="page" id="page-trend">
+  <div class="sec-title">트렌드 둘러보기</div>
+  <div class="sec-sub">스타일 선택하면 새 탭에서 검색 결과를 열어줘요</div>
+
+  <div class="chip-label">스타일</div>
+  <div class="chips" id="trendStyleChips">
+    <div class="chip" data-val="올블랙 스트릿">올블랙 스트릿</div>
+    <div class="chip" data-val="미니멀 무드">미니멀 무드</div>
+    <div class="chip" data-val="걸리시 페미닌">걸리시 페미닌</div>
+    <div class="chip" data-val="Y2K 레트로">Y2K 레트로</div>
+    <div class="chip" data-val="오피스 시크">오피스 시크</div>
+    <div class="chip" data-val="올드머니">올드머니</div>
+    <div class="chip" data-val="고프코어">고프코어</div>
+    <div class="chip" data-val="빈티지">빈티지</div>
+  </div>
+
+  <div class="chip-label">계절 (선택)</div>
+  <div class="chips" id="trendSeasonChips">
+    <div class="chip" data-val="여름">여름</div>
+    <div class="chip" data-val="가을">가을</div>
+    <div class="chip" data-val="겨울">겨울</div>
+    <div class="chip" data-val="봄">봄</div>
+  </div>
+
+  <textarea class="free-input" id="trendFreeInput" rows="2" placeholder="추가 키워드 (예: 데이트룩, 청바지 활용)"></textarea>
+
+  <div class="divider"></div>
+  <div class="field-label">어디서 볼까요?</div>
+  <button class="btn-big" onclick="openTrend('musinsa')">🛍 무신사 스냅에서 보기</button>
+  <button class="btn-big" onclick="openTrend('zigzag')">💗 지그재그에서 보기</button>
+  <button class="btn-big" onclick="openTrend('pinterest')">📌 핀터레스트에서 보기</button>
 </div>
 
 <!-- 옷장 -->
@@ -302,7 +337,7 @@ function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
-  document.querySelectorAll('.nav-tab')[{recommend:0,closet:1,add:2,setting:3}[id]].classList.add('active');
+  document.querySelectorAll('.nav-tab')[{recommend:0,trend:1,closet:2,add:3,setting:4}[id]].classList.add('active');
   if(id==='closet')renderCloset();
   if(id==='setting')initSettings();
   if(id==='recommend')renderColorChips('colorFilterChips',getSelectedColors('colorFilterChips'));
@@ -548,6 +583,31 @@ function recommend(){
       </div>`;
     ra.appendChild(card);
   });
+}
+
+// ── 트렌드 ──────────────────────────────────────────
+document.querySelectorAll('#trendStyleChips .chip, #trendSeasonChips .chip').forEach(c=>{
+  c.addEventListener('click',()=>c.classList.toggle('on'));
+});
+
+function openTrend(site){
+  const styles=[...document.querySelectorAll('#trendStyleChips .chip.on')].map(c=>c.dataset.val);
+  const seasons=[...document.querySelectorAll('#trendSeasonChips .chip.on')].map(c=>c.dataset.val);
+  const free=document.getElementById('trendFreeInput').value.trim();
+  const parts=[...styles,...seasons];
+  if(free)parts.push(free);
+  if(!parts.length){alert('스타일을 하나 이상 선택해주세요!');return;}
+  const query=parts.join(' ')+' 코디';
+
+  let url='';
+  if(site==='musinsa'){
+    url=`https://www.musinsa.com/search/musinsa/integration?type=styling&keyword=${encodeURIComponent(query)}`;
+  }else if(site==='zigzag'){
+    url=`https://zigzag.kr/search?keyword=${encodeURIComponent(query)}`;
+  }else if(site==='pinterest'){
+    url=`https://www.pinterest.com/search/pins/?q=${encodeURIComponent(query)}`;
+  }
+  window.open(url,'_blank');
 }
 
 // ── 초기화 ──────────────────────────────────────────
